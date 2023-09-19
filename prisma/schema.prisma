@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model rss {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String
+  rssDetail   rss_detail[]
+}
+
+model rss_detail {
+  id     Int     @id @default(autoincrement())
+  title  String
+  url    String
+  quote  String?
+  // TODO: 制約を追加 ここの理解必要
+  rss    rss?    @relation(fields: [rss_id], references: [id])
+  rss_id Int?
+}

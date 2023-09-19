@@ -5,13 +5,19 @@
 **Language** - [TypeScript](https://www.typescriptlang.org/)  
 **Main Framework** - [Express](https://expressjs.com/)  
 **ORM** - [Prisma](https://www.prisma.io/)  
-**Database** - [PostgreSQL](https://www.postgresql.org/)    
+**Database** - [PostgreSQL](https://www.postgresql.org/)  
 **test** - [Jest](https://jestjs.io/)  
 **Authentication** - [Passport](http://www.passportjs.org/)  
 **Code Formatting** - [Prettier](https://prettier.io/)  
 **Linting** - [ESLint](https://eslint.org)
 
 ## Commands
+
+Connect to PostgreSQL
+
+```bash
+psql -h 127.0.0.1 -U sola -p 5555 rss-db
+```
 
 Edit database with GUI
 
