@@ -1,6 +1,6 @@
 import express from "express";
 import healthRoutes from "./routes/healthRoutes";
-// import rssRoutes from "./routes/rssRoutes";
+import newsRoutes from "./routes/newsRoutes";
 import "dotenv/config";
 
 const app = express();
@@ -11,7 +11,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use("/v1/rss", rssRoutes);
+app.use("/v1/news", newsRoutes);
 app.use("/health", healthRoutes);
 
 const server = app.listen(PORT, () => {

@@ -1,0 +1,34 @@
+{
+  timezone: "Asia/Tokyo",
+  baseBranches: ["main"],
+  extends: ["config:base", ":semanticCommitTypeAll(chore)"],
+  enabledManagers: ["npm"],
+  dependencyDashboard: true,
+  schedule: ["before 11am every weekday"],
+  automergeSchedule: ["before 11am every weekday"],
+  labels: ["dependencies"],
+  rangeStrategy: "bump",
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true,
+  },
+  packageRules: [
+    {
+      matchManagers: ["npm"],
+      matchDepTypes: ["devDependencies"],
+      matchPackagePatterns: ["lint", "prettier"],
+      automerge: true,
+    },
+    {
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchCurrentVersion: "!/^0/",
+      automerge: true,
+    },
+    {
+      extends: ["monorepo:ionic-native"],
+      matchUpdateTypes: ["patch", "minor"],
+      automerge: true,
+    },
+  ],
+}
