@@ -7,19 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model rss {
+model News {
   id          Int          @id @default(autoincrement())
   title       String
   description String
-  rssDetail   rss_detail[]
+  newsDetail  NewsDetail[]
+
+  @@map("news")
 }
 
-model rss_detail {
-  id     Int     @id @default(autoincrement())
-  title  String
-  url    String
-  quote  String?
+model NewsDetail {
+  id        Int     @id @default(autoincrement())
+  title     String
+  url       String
+  quote     String?
+  published Boolean @default(false)
+  favorite  Boolean @default(false)
   // TODO: 制約を追加 ここの理解必要
-  rss    rss?    @relation(fields: [rss_id], references: [id])
-  rss_id Int?
+  news      News?   @relation(fields: [newsId], references: [id])
+  newsId    Int?    @map("news_id")
+
+  @@map("news_detail")
 }
