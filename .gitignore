@@ -6,3 +6,5 @@ dist
 test/output.txt
 
 yarn-error.log
+
+coverage

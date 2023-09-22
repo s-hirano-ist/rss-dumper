@@ -20,5 +20,8 @@ CREATE TABLE "news_detail" (
     CONSTRAINT "news_detail_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateIndex
+CREATE UNIQUE INDEX "news_title_key" ON "news"("title");
+
 -- AddForeignKey
 ALTER TABLE "news_detail" ADD CONSTRAINT "news_detail_news_id_fkey" FOREIGN KEY ("news_id") REFERENCES "news"("id") ON DELETE SET NULL ON UPDATE CASCADE;

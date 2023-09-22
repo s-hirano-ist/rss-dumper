@@ -14,7 +14,7 @@ const prisma = new PrismaClient();
 export const getAllNews = async (_: Request, response: Response) => {
   try {
     const allNews = await prisma.news.findMany({
-      select: { /*id: true,*/ title: true, description: true },
+      select: { title: true, description: true },
     });
     response.status(200).json(allNews);
   } catch (error) {
@@ -32,7 +32,7 @@ export const getNewsByTitle = async (request: Request, response: Response) => {
   try {
     const news = await prisma.news.findUnique({
       where: { title: request.params.title },
-      select: { /*id: true,*/ title: true, description: true },
+      select: { title: true, description: true },
     });
     if (news === null) notFoundError(response);
     else response.status(200).json(news);
@@ -51,7 +51,7 @@ export const createNews = async (request: Request, response: Response) => {
     const description = validateString(request.body.description);
     const data = await prisma.news.create({
       data: { title, description },
-      select: { /*id: true,*/ title: true, description: true },
+      select: { title: true, description: true },
     });
     response.status(201).json(data);
   } catch (error) {

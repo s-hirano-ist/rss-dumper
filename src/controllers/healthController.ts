@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
 export const healthController = (_: Request, response: Response) => {
-  response.send("Backend is healthy");
+  response.status(200).json("Backend is healthy");
   return;
 };
