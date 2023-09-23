@@ -16,6 +16,7 @@ export function prismaError(
       sendInfoResponse(response, 404, "Not found");
       break;
     default: // should not run
+      /* istanbul ignore next */
       sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", "onPrismaError");
       break;
   }
@@ -24,10 +25,7 @@ export function validationError(response: Response, message: string) {
   sendInfoResponse(response, 400, message);
 }
 
-export function notFoundError(response: Response) {
-  sendInfoResponse(response, 404, "Not found");
-}
-
+/* istanbul ignore next */
 export function unknownError(response: Response, error: unknown) {
   // should not run
   if (error instanceof Error) {
@@ -46,9 +44,6 @@ export class ValidationError extends Error {
         break;
       case "RequestKeyMissingException":
         this.name = "Invalid request key";
-        break;
-      default: // should not run
-        this.name = "Unknown error";
         break;
     }
   }

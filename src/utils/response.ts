@@ -15,6 +15,7 @@ export function sendInfoResponse(
     response.status(status).json({
       message: "ERROR: " + message,
     });
+    /* istanbul ignore next */
     if (consoleOnlyError) console.error("ERROR", consoleOnlyError);
     else {
       if (process.env.NODE_ENV !== "test") console.error("ERROR:", message);

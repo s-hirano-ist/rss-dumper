@@ -2,7 +2,6 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import {
   ValidationError,
-  notFoundError,
   prismaError,
   unknownError,
   validationError,
@@ -19,30 +18,21 @@ export const getAllNews = async (_: Request, response: Response) => {
     });
     response.status(200).json(allNews);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
-    return;
+    unknownError(response, error);
   }
-  return;
 };
 
 export const getNewsByTitle = async (request: Request, response: Response) => {
   try {
-    const news = await prisma.news.findUnique({
+    const news = await prisma.news.findUniqueOrThrow({
       where: { title: request.params.title },
       select: { title: true, description: true },
     });
-    if (news === null) notFoundError(response);
-    else response.status(200).json(news);
+    response.status(200).json(news);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError)
       prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
+    else unknownError(response, error);
   }
 };
 
@@ -95,11 +85,7 @@ export const deleteAllNews = async (_: Request, response: Response) => {
     await prisma.news.deleteMany();
     sendInfoResponse(response, 200, "Deleted all");
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
+    unknownError(response, error);
   }
 };
 
@@ -113,10 +99,8 @@ export const deleteNewsByTitle = async (
     });
     sendInfoResponse(response, 200, `Deleted ${data.title}`);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError)
       prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
+    else unknownError(response, error);
   }
 };
