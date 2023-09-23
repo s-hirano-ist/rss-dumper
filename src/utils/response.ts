@@ -16,6 +16,8 @@ export function sendInfoResponse(
       message: "ERROR: " + message,
     });
     if (consoleOnlyError) console.error("ERROR", consoleOnlyError);
-    else console.error("ERROR:", message);
+    else {
+      if (process.env.NODE_ENV !== "test") console.error("ERROR:", message);
+    }
   }
 }

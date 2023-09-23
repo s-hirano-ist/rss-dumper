@@ -13,7 +13,7 @@ export function prismaError(
       break;
     case "P2025":
       // "An operation failed because it depends on one or more records that were required but not found. {cause}"
-      sendInfoResponse(response, 400, "Not found");
+      sendInfoResponse(response, 404, "Not found");
       break;
     default: // should not run
       sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", "onPrismaError");
@@ -25,7 +25,7 @@ export function validationError(response: Response, message: string) {
 }
 
 export function notFoundError(response: Response) {
-  sendInfoResponse(response, 400, "Not found");
+  sendInfoResponse(response, 404, "Not found");
 }
 
 export function unknownError(response: Response, error: unknown) {
