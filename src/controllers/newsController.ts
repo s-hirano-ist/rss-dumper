@@ -1,13 +1,9 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import {
-  ValidationError,
-  prismaError,
-  unknownError,
-  validationError,
-} from "../utils/error";
+import { ValidationError } from "joi";
+import { prismaError, unknownError, validationError } from "../utils/error";
 import { sendInfoResponse } from "../utils/response";
-import { validateString } from "../utils/validation";
+import { newsPostSchema, newsPatchSchema } from "../utils/schema";
 
 const prisma = new PrismaClient();
 
@@ -38,16 +34,21 @@ export const getNewsByTitle = async (request: Request, response: Response) => {
 
 export const createNews = async (request: Request, response: Response) => {
   try {
-    const title = validateString(request.body.title);
-    const description = validateString(request.body.description);
+    const validatedValue = await newsPostSchema.validateAsync(request.body, {
+      abortEarly: false,
+    });
+
     const data = await prisma.news.create({
-      data: { title, description },
+      data: {
+        title: validatedValue.title,
+        description: validatedValue.description,
+      },
       select: { title: true, description: true },
     });
     response.status(201).json(data);
   } catch (error) {
     if (error instanceof ValidationError) {
-      validationError(response, error.name);
+      validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
     } else {
@@ -61,17 +62,19 @@ export const updateNewsByTitle = async (
   response: Response,
 ) => {
   try {
-    const description = validateString(request.body.description);
+    const validatedValue = await newsPatchSchema.validateAsync(request.body, {
+      abortEarly: false,
+    });
     const data = await prisma.news.update({
       where: { title: request.params.title },
       data: {
-        description,
+        description: validatedValue.description,
       },
     });
     sendInfoResponse(response, 200, `Updated ${data.title}`);
   } catch (error) {
     if (error instanceof ValidationError) {
-      validationError(response, error.name);
+      validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
     } else {

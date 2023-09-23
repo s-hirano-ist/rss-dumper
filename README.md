@@ -9,7 +9,8 @@
 **test** - [Jest](https://jestjs.io/)  
 **Authentication** - [Passport](http://www.passportjs.org/)  
 **Code Formatting** - [Prettier](https://prettier.io/)  
-**Linting** - [ESLint](https://eslint.org)
+**Linting** - [ESLint](https://eslint.org)  
+**Validation** - [Joi](https://joi.dev/)
 
 ## 🍾 Initial setups
 
@@ -24,6 +25,24 @@ docker compose up --build -d
 
 ```bash
 yarn test
+```
+
+## Curl commands
+
+```bash
+# GET
+curl -s http://localhost:8080/v1/news/
+curl -s http://localhost:8080/v1/news/testA
+
+# POST
+curl -s -d '{"title": "testA", "description": "test description A"}' -H 'Content-Type: application/json' http://localhost:8080/v1/news
+
+# PATCH
+curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH http://localhost:8080/v1/news/testA
+
+# DELETE
+curl -s -X DELETE http://localhost:8080/v1/news/testA
+curl -s -X DELETE http://localhost:8080/v1/news/
 ```
 
 ## 🪝 Tags
@@ -46,6 +65,14 @@ Express, Prisma, REST API
 ExpressにTypeScript導入
 
 > https://reffect.co.jp/node-js/express-typescript/
+
+Express validator
+
+- this did not work well on supertest with jest.
+
+> https://express-validator.github.io/docs/guides/getting-started
+>
+> https://blog.capilano-fw.com/?p=5619
 
 ### TypeScript
 

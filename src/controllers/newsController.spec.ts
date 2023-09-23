@@ -18,9 +18,9 @@ describe("userController test", () => {
   type UpdateDataType = { description: string };
 
   const data: CreateDataType[] = [
-    { title: "testA", description: "description A" },
-    { title: "testB", description: "description B" },
-    { title: "testC", description: "description C" },
+    { title: "test-a", description: "description A" },
+    { title: "test-b", description: "description B" },
+    { title: "test-c", description: "description C" },
   ];
 
   describe("GET /v1/news", () => {
@@ -98,9 +98,9 @@ describe("userController test", () => {
         .post("/v1/news")
         .send(missingKeyBody);
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        message: "ERROR: Invalid request key",
+        message: 'ERROR: "description" is required',
       });
       const news = await prisma.news.findMany();
       expect(news.length).toBe(0);
@@ -114,9 +114,9 @@ describe("userController test", () => {
         .post("/v1/news")
         .send(invalidKeyBody);
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        message: "ERROR: Invalid request key",
+        message: 'ERROR: "title" is required. "invalidKey" is not allowed',
       });
       const news = await prisma.news.findMany();
       expect(news.length).toBe(0);
@@ -130,9 +130,9 @@ describe("userController test", () => {
         .post("/v1/news")
         .send(invalidTypeBody);
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        message: "ERROR: Invalid request type",
+        message: 'ERROR: "description" must be a string',
       });
       const news = await prisma.news.findMany();
       expect(news.length).toBe(0);
@@ -184,8 +184,11 @@ describe("userController test", () => {
       const response = await supertest(app)
         .patch(`/v1/news/${d.title}`)
         .send(invalidKeyBody);
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({ message: "ERROR: Invalid request key" });
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message:
+          'ERROR: "description" is required. "invalidKey" is not allowed',
+      });
       const news = await prisma.news.findMany();
       expect(news.length).toBe(0);
     });
@@ -197,8 +200,10 @@ describe("userController test", () => {
       const response = await supertest(app)
         .patch(`/v1/news/${d.title}`)
         .send(invalidTypeBody);
-      expect(response.status).toBe(400);
-      expect(response.body).toEqual({ message: "ERROR: Invalid request type" });
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message: 'ERROR: "description" must be a string',
+      });
       const news = await prisma.news.findMany();
       expect(news.length).toBe(0);
     });

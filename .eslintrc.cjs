@@ -38,6 +38,9 @@ module.exports = {
     ],
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-misused-promises": "off",
+    // FIXME: delete
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-call": "off",
   },
   root: true,
   settings: {
