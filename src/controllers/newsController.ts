@@ -33,6 +33,23 @@ export const getNewsByTitle = async (request: Request, response: Response) => {
   }
 };
 
+export const getNewsAndNewsDetailByTitle = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const news = await prisma.news.findUniqueOrThrow({
+      where: { title: request.params.title },
+      select: { title: true, description: true, newsDetail: true },
+    });
+    response.status(200).json(news);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError)
+      prismaError(response, error);
+    else unknownError(response, error);
+  }
+};
+
 export const createNews = async (request: Request, response: Response) => {
   try {
     const validatedValue = await newsPostSchema.validateAsync(request.body, {
@@ -82,6 +99,7 @@ export const updateNewsByTitle = async (
   }
 };
 
+// TODO: need error if news detail exists
 export const deleteAllNews = async (_: Request, response: Response) => {
   try {
     await prisma.news.deleteMany();
@@ -91,11 +109,29 @@ export const deleteAllNews = async (_: Request, response: Response) => {
   }
 };
 
+// TODO: need error if news detail exists
 export const deleteNewsByTitle = async (
   request: Request,
   response: Response,
 ) => {
   try {
+    const data = await prisma.news.delete({
+      where: { title: request.params.title },
+    });
+    sendInfoResponse(response, 200, `Deleted ${data.title}`);
+  } catch (error) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError)
+      prismaError(response, error);
+    else unknownError(response, error);
+  }
+};
+
+export const deleteNewsAndNewsDetailByTitle = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    // TODO: no error should occur
     const data = await prisma.news.delete({
       where: { title: request.params.title },
     });
