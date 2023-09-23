@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { ValidationError } from "joi";
+import sanitizeHtml from "sanitize-html";
 import { prismaError, unknownError, validationError } from "../utils/error";
 import { sendInfoResponse } from "../utils/response";
 import { newsPostSchema, newsPatchSchema } from "../utils/schema";
@@ -37,12 +38,11 @@ export const createNews = async (request: Request, response: Response) => {
     const validatedValue = await newsPostSchema.validateAsync(request.body, {
       abortEarly: false,
     });
+    const title = sanitizeHtml(validatedValue.title as string);
+    const description = sanitizeHtml(validatedValue.description as string);
 
     const data = await prisma.news.create({
-      data: {
-        title: validatedValue.title,
-        description: validatedValue.description,
-      },
+      data: { title, description },
       select: { title: true, description: true },
     });
     response.status(201).json(data);
@@ -65,11 +65,10 @@ export const updateNewsByTitle = async (
     const validatedValue = await newsPatchSchema.validateAsync(request.body, {
       abortEarly: false,
     });
+    const description = sanitizeHtml(validatedValue.description as string);
     const data = await prisma.news.update({
       where: { title: request.params.title },
-      data: {
-        description: validatedValue.description,
-      },
+      data: { description },
     });
     sendInfoResponse(response, 200, `Updated ${data.title}`);
   } catch (error) {

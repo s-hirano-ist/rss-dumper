@@ -52,6 +52,14 @@ git tag vx.x.x
 git push origin vx.x.x
 ```
 
+## Notes
+
+Sanitization to prevent XSS is done by [sanitize-html](https://github.com/apostrophecms/sanitize-html)
+
+No sanitization to prevent SQL injection is needed due to Prisma's prevention.
+
+> https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#sql-injection
+
 ## References
 
 Express, Prisma, REST API
