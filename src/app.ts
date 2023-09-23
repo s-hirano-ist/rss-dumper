@@ -15,7 +15,8 @@ app.use("/v1/news", newsRoutes);
 app.use("/health", healthRoutes);
 
 const server = app.listen(PORT, () => {
-  console.log(`REST API express server ready at: ${IP_ADDRESS}:${PORT}`);
+  if (process.env.NODE_ENV !== "test")
+    console.log(`REST API express server ready at: ${IP_ADDRESS}:${PORT}`);
 });
 
 export { app, server };
