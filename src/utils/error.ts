@@ -22,7 +22,7 @@ export function prismaError(
   }
 }
 export function validationError(response: Response, message: string) {
-  sendInfoResponse(response, 400, message);
+  sendInfoResponse(response, 422, message);
 }
 
 /* istanbul ignore next */
@@ -34,18 +34,3 @@ export function unknownError(response: Response, error: unknown) {
     sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", error);
   }
 }
-
-export class ValidationError extends Error {
-  constructor(message: MessageType) {
-    super(message);
-    switch (message) {
-      case "RequestTypeInvalidException":
-        this.name = "Invalid request type";
-        break;
-      case "RequestKeyMissingException":
-        this.name = "Invalid request key";
-        break;
-    }
-  }
-}
-type MessageType = "RequestTypeInvalidException" | "RequestKeyMissingException";
