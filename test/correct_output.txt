@@ -17,6 +17,8 @@ ERROR: Invalid insert type
 Database with data
 [{"title":"testA","description":"test description A"},{"title":"testB","description":"test description B"},{"title":"testC","description":"test description C"}]
 {"title":"testA","description":"test description A"}
+ERROR: Row not found
+{"message":"ERROR: Not found"}
 Update row
 {"message":"Updated testA"}
 ERROR: Invalid update key

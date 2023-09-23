@@ -28,6 +28,8 @@ echo "\nDatabase with data"
 curl -s http://localhost:8080/v1/news/
 echo ""
 curl -s http://localhost:8080/v1/news/testA
+echo "\nERROR: Row not found"
+curl -s http://localhost:8080/v1/news/XXX
 
 echo "\nUpdate row"
 curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH http://localhost:8080/v1/news/testA
