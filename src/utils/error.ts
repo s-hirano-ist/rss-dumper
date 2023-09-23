@@ -18,6 +18,7 @@ export function prismaError(
     default: // should not run
       /* istanbul ignore next */
       sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", "onPrismaError");
+      /* istanbul ignore next */
       break;
   }
 }

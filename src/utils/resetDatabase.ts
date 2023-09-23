@@ -14,6 +14,7 @@ export default async function () {
         if (code === 0) {
           resolve(0);
         } else {
+          /* istanbul ignore next */
           reject(code);
         }
       });

@@ -7,7 +7,6 @@ import {
   updateNewsByTitle,
   deleteAllNews,
   deleteNewsByTitle,
-  deleteNewsAndNewsDetailByTitle,
 } from "../controllers/newsController";
 
 const router = Router();
@@ -22,6 +21,5 @@ router.patch("/:title", updateNewsByTitle);
 
 router.delete("/", deleteAllNews);
 router.delete("/:title", deleteNewsByTitle);
-router.delete("/:title/all", deleteNewsAndNewsDetailByTitle);
 
 export default router;

@@ -17,3 +17,13 @@ export const newsPostSchema = Joi.object().keys({
 export const newsPatchSchema = Joi.object().keys({
   description: descriptionSchema,
 });
+
+export const idSchema = Joi.object().keys({
+  id: Joi.number().required().integer().min(1),
+});
+
+export const newsDetailPostSchema = Joi.object().keys({
+  title: Joi.string().required(),
+  url: Joi.string().uri().required(),
+  quote: Joi.string().default(""),
+});
