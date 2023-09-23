@@ -1,7 +1,5 @@
 import { spawn } from "child_process";
 
-// TODO: このコードじゃなくてもいいのかも?
-
 export default async function () {
   if (process.env.NODE_ENV === "test") {
     await new Promise((resolve, reject) => {
