@@ -54,5 +54,5 @@ echo "\nDeleted database"
 curl -s -X DELETE http://localhost:8080/v1/news/
 
 echo ""
-curl http://localhost:8080/v1/news/
+curl -s http://localhost:8080/v1/news/
 echo ""
