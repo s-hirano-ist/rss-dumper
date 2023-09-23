@@ -18,6 +18,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/ban-ts-comment": "off",
     "react/prop-types": "off",
+    "@typescript-eslint/consistent-type-definitions": ["error", "type"],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {

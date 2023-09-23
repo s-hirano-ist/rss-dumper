@@ -2,11 +2,11 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import {
   ValidationError,
-  notFoundError,
   prismaError,
   unknownError,
   validationError,
 } from "../utils/error";
+import { sendInfoResponse } from "../utils/response";
 import { validateString } from "../utils/validation";
 
 const prisma = new PrismaClient();
@@ -18,30 +18,21 @@ export const getAllNews = async (_: Request, response: Response) => {
     });
     response.status(200).json(allNews);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
-    return;
+    unknownError(response, error);
   }
-  return;
 };
 
 export const getNewsByTitle = async (request: Request, response: Response) => {
   try {
-    const news = await prisma.news.findUnique({
+    const news = await prisma.news.findUniqueOrThrow({
       where: { title: request.params.title },
       select: { title: true, description: true },
     });
-    if (news === null) notFoundError(response);
-    else response.status(200).json(news);
+    response.status(200).json(news);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError)
       prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
+    else unknownError(response, error);
   }
 };
 
@@ -77,9 +68,7 @@ export const updateNewsByTitle = async (
         description,
       },
     });
-    response.status(200).json({
-      message: `Updated ${data.title}`,
-    });
+    sendInfoResponse(response, 200, `Updated ${data.title}`);
   } catch (error) {
     if (error instanceof ValidationError) {
       validationError(response, error.name);
@@ -94,15 +83,9 @@ export const updateNewsByTitle = async (
 export const deleteAllNews = async (_: Request, response: Response) => {
   try {
     await prisma.news.deleteMany();
-    response.status(200).json({
-      message: "Deleted all",
-    });
+    sendInfoResponse(response, 200, "Deleted all");
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
+    unknownError(response, error);
   }
 };
 
@@ -114,14 +97,10 @@ export const deleteNewsByTitle = async (
     const data = await prisma.news.delete({
       where: { title: request.params.title },
     });
-    response.status(200).json({
-      message: `Deleted ${data.title}`,
-    });
+    sendInfoResponse(response, 200, `Deleted ${data.title}`);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError)
       prismaError(response, error);
-    } else {
-      unknownError(response, error);
-    }
+    else unknownError(response, error);
   }
 };

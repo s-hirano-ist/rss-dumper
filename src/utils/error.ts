@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import type { Response } from "express";
+import { sendInfoResponse } from "./response";
 
 export function prismaError(
   response: Response,
@@ -8,49 +9,29 @@ export function prismaError(
   switch (error.code) {
     case "P2002":
       // "Unique constraint failed on the {constraint}"
-      response.status(400).json({
-        message: "ERROR: Duplicate Entry",
-      });
-      console.error("ERROR: Duplicate Entry");
+      sendInfoResponse(response, 400, "Duplicate Entry");
       break;
     case "P2025":
       // "An operation failed because it depends on one or more records that were required but not found. {cause}"
-      response.status(400).json({
-        message: "ERROR: Not found",
-      });
-      console.error("ERROR: Not found");
+      sendInfoResponse(response, 404, "Not found");
       break;
-    default:
-      response.status(500).json({
-        message: "Internal server error",
-      });
-      console.error("INTERNAL SERVER ERROR:", error.message);
+    default: // should not run
+      /* istanbul ignore next */
+      sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", "onPrismaError");
       break;
   }
 }
 export function validationError(response: Response, message: string) {
-  response.status(400).json({
-    message: message,
-  });
-  console.error(message);
+  sendInfoResponse(response, 400, message);
 }
-export function notFoundError(response: Response) {
-  response.status(400).json({
-    message: "ERROR: Not found",
-  });
-  console.error("ERROR: Not found");
-}
+
+/* istanbul ignore next */
 export function unknownError(response: Response, error: unknown) {
+  // should not run
   if (error instanceof Error) {
-    response.status(500).json({
-      message: "ERROR: Internal server error",
-    });
-    console.error("ERROR: UNKNOWN: ", error.message);
+    sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", error.message);
   } else {
-    response.status(500).json({
-      message: "ERROR: Internal server error",
-    });
-    console.error("ERROR: UNKNOWN: ", error);
+    sendInfoResponse(response, 500, "INTERNAL SERVER ERROR", error);
   }
 }
 
@@ -59,13 +40,10 @@ export class ValidationError extends Error {
     super(message);
     switch (message) {
       case "RequestTypeInvalidException":
-        this.name = "ERROR: Invalid request type";
+        this.name = "Invalid request type";
         break;
       case "RequestKeyMissingException":
-        this.name = "ERROR: Invalid request key";
-        break;
-      default:
-        this.name = "ERROR: Unknown error";
+        this.name = "Invalid request key";
         break;
     }
   }

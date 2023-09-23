@@ -25,4 +25,5 @@ jobs:
       - run: yarn install --frozen-lockfile
       - run: yarn fmt
       - run: yarn lint
+      # - run: yarn test # TODO: want to run tests but needs postgreSQL database running
       - run: yarn build

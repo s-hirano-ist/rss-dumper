@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 async function main() {
   try {
     const sampleData1 = await prisma.news.create({
-      // MEMO: UPSERT: if already exists then update, otherwise create
+      // UPSERT: if already exists then update, otherwise create
       data: {
         title: "A",
         description: "sample A",

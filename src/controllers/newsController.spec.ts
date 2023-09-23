@@ -14,7 +14,10 @@ describe("userController test", () => {
     server.close();
   });
 
-  const data = [
+  type CreateDataType = { title: string; description: string };
+  type UpdateDataType = { description: string };
+
+  const data: CreateDataType[] = [
     { title: "testA", description: "description A" },
     { title: "testB", description: "description B" },
     { title: "testC", description: "description C" },
@@ -25,11 +28,10 @@ describe("userController test", () => {
       await Promise.all(
         data.map(async d => {
           await prisma.news.create({
-            data: { title: d.title, description: d.description },
+            data: d,
           });
         }),
       );
-
       const news = await prisma.news.findMany({
         select: { title: true, description: true },
       });
@@ -40,64 +42,207 @@ describe("userController test", () => {
     });
   });
 
-  // TODO: more and more tests
+  describe("GET /v1/news/:title", () => {
+    test("response with success", async () => {
+      const d = data[0];
+      await prisma.news.create({ data: d });
+      const news = await prisma.news.findUnique({
+        where: { title: d.title },
+        select: { title: true, description: true },
+      });
 
-  //   describe("GET /users/:id", () => {
-  //     test("response with success", async () => {
-  //       const user = await prisma.user.create({
-  //         data: { id: 1, name: "user1", email: "user1@example.com" },
-  //       });
+      const response = await supertest(app).get(`/v1/news/${d.title}`);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(news);
+    });
+    test("ERROR: row not found", async () => {
+      const d = data[0];
+      await prisma.news.create({ data: d });
+      await prisma.news.findUnique({
+        where: { title: d.title },
+        select: { title: true, description: true },
+      });
 
-  //       const response = await supertest(sqliteExpress).get("/users/1");
-  //       expect(response.status).toBe(200);
-  //       expect(response.body.user).toEqual(user);
-  //     });
-  //   });
+      const unknownTitle = "XXX";
+      const response = await supertest(app).get(`/v1/news/${unknownTitle}`);
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+    });
+  });
 
-  //   describe("POST /users", () => {
-  //     test("response with success", async () => {
-  //       const body = { id: 1, name: "user1", email: "user1@example.com" };
-  //       const response = await supertest(sqliteExpress).post("/users").send(body);
-  //       expect(response.status).toBe(200);
-  //       expect(response.body.user).toEqual(body);
+  describe("POST /v1/news", () => {
+    test("response with success", async () => {
+      const body = data[0];
+      const response = await supertest(app).post("/v1/news").send(body);
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(body);
 
-  //       const users = await prisma.user.findMany();
-  //       expect(users.length).toBe(1);
-  //     });
-  //   });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(1);
+    });
+    test("ERROR: duplicate", async () => {
+      const body = data[0];
+      await supertest(app).post("/v1/news").send(body);
+      const secondResponse = await supertest(app).post("/v1/news").send(body);
 
-  //   describe("PUT /users/:id", () => {
-  //     test("response with success", async () => {
-  //       await prisma.user.create({
-  //         data: { id: 1, name: "user1", email: "user1@example.com" },
-  //       });
+      expect(secondResponse.status).toBe(400);
+      expect(secondResponse.body).toEqual({
+        message: "ERROR: Duplicate Entry",
+      });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(1);
+    });
+    test("ERROR: missing key", async () => {
+      const missingKeyBody = { title: data[0].title };
+      const response = await supertest(app)
+        .post("/v1/news")
+        .send(missingKeyBody);
 
-  //       const body = { name: "updated", email: "updated@example.com" };
-  //       const response = await supertest(sqliteExpress)
-  //         .put("/users/1")
-  //         .send(body);
-  //       expect(response.status).toBe(200);
-  //       expect(response.body.user.name).toEqual(body.name);
-  //       expect(response.body.user.email).toEqual(body.email);
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        message: "ERROR: Invalid request key",
+      });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+    test("ERROR: invalid key", async () => {
+      const invalidKeyBody = {
+        invalidKey: data[0].title,
+        description: data[0].description,
+      };
+      const response = await supertest(app)
+        .post("/v1/news")
+        .send(invalidKeyBody);
 
-  //       const after = await prisma.user.findUnique({ where: { id: 1 } });
-  //       expect(after?.name).toEqual(body.name);
-  //       expect(after?.email).toEqual(body.email);
-  //     });
-  //   });
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        message: "ERROR: Invalid request key",
+      });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+    test("ERROR: invalid type", async () => {
+      const invalidTypeBody = {
+        title: data[0].title,
+        description: 123,
+      };
+      const response = await supertest(app)
+        .post("/v1/news")
+        .send(invalidTypeBody);
 
-  //   describe("DELETE /users/:id", () => {
-  //     test("response with success", async () => {
-  //       const user = await prisma.user.create({
-  //         data: { id: 1, name: "user1", email: "user1@example.com" },
-  //       });
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({
+        message: "ERROR: Invalid request type",
+      });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+  });
 
-  //       const response = await supertest(sqliteExpress).delete("/users/1");
-  //       expect(response.status).toBe(200);
-  //       expect(response.body.user).toEqual(user);
+  describe("PATCH /v1/news/:title", () => {
+    test("response with success", async () => {
+      const d = data[0];
+      await prisma.news.create({
+        data: d,
+      });
+      const description = "updated description";
+      const body: UpdateDataType = { description: description };
 
-  //       const users = await prisma.user.findMany();
-  //       expect(users.length).toBe(0);
-  //     });
-  //   });
+      const response = await supertest(app)
+        .patch(`/v1/news/${d.title}`)
+        .send(body);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: `Updated ${d.title}` });
+
+      const updatedNews = await prisma.news.findUnique({
+        where: { title: d.title },
+      });
+      expect(updatedNews?.title).toEqual(data[0].title);
+      expect(updatedNews?.description).toEqual(body.description);
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(1);
+    });
+    test("ERROR: not found", async () => {
+      const description = "updated description";
+      const body: UpdateDataType = { description: description };
+
+      const unknownTitle = "XXX";
+      const response = await supertest(app)
+        .patch(`/v1/news/${unknownTitle}`)
+        .send(body);
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+    test("ERROR: invalid key", async () => {
+      const d = data[0];
+      const invalidKeyBody = {
+        invalidKey: "updated description",
+      };
+      const response = await supertest(app)
+        .patch(`/v1/news/${d.title}`)
+        .send(invalidKeyBody);
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ message: "ERROR: Invalid request key" });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+    test("ERROR: invalid type", async () => {
+      const d = data[0];
+      const invalidTypeBody = {
+        description: 123,
+      };
+      const response = await supertest(app)
+        .patch(`/v1/news/${d.title}`)
+        .send(invalidTypeBody);
+      expect(response.status).toBe(400);
+      expect(response.body).toEqual({ message: "ERROR: Invalid request type" });
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+  });
+
+  describe("DELETE /v1/news/", () => {
+    test("response with success", async () => {
+      await Promise.all(
+        data.map(async d => {
+          await prisma.news.create({
+            data: d,
+          });
+        }),
+      );
+      const response = await supertest(app).delete("/v1/news/");
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: "Deleted all" });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+  });
+  describe("DELETE /v1/news/:title", () => {
+    test("response with success", async () => {
+      const d = data[0];
+      await prisma.news.create({
+        data: d,
+      });
+
+      const response = await supertest(app).delete(`/v1/news/${data[0].title}`);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: `Deleted ${d.title}` });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+    test("ERROR: not found", async () => {
+      const unknownTitle = "XXX";
+      const response = await supertest(app).delete(`/v1/news/${unknownTitle}`);
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(0);
+    });
+  });
 });

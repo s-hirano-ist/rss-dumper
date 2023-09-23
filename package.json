@@ -16,7 +16,7 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:dev": "run-s -l prisma:generate prisma:migrate prisma:seed",
     "prisma:studio": "prisma studio",
-    "test": "NODE_ENV=test jest --collect-coverage",
+    "test": "NODE_ENV=test jest --runInBand --collect-coverage",
     "test:sh": "sh test/test.sh"
   },
   "author": "",
