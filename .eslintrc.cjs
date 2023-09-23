@@ -36,14 +36,8 @@ module.exports = {
         "newlines-between": "never",
       },
     ],
-    // TODO: enable these rules
-    "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
-    "@typescript-eslint/no-unsafe-call": "off",
     "@typescript-eslint/no-misused-promises": "off",
-    "@typescript-eslint/no-unsafe-argument": "off",
-    // TODO: disable this rule
-    // "no-restricted-imports": ["error", { patterns: ["./", "../"] }],
   },
   root: true,
   settings: {
