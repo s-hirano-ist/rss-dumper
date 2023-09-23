@@ -26,6 +26,13 @@ docker compose up --build -d
 yarn test
 ```
 
+## 🪝 Tags
+
+```bash
+git tag vx.x.x
+git push origin vx.x.x
+```
+
 ## References
 
 Express, Prisma, REST API
