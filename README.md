@@ -11,39 +11,19 @@
 **Code Formatting** - [Prettier](https://prettier.io/)  
 **Linting** - [ESLint](https://eslint.org)
 
-## Commands
-
-Connect to PostgreSQL
+## 🍾 Initial setups
 
 ```bash
-psql -h 127.0.0.1 -U sola -p 5555 rss-db
-```
-
-Edit database with GUI
-
-```bash
-yarn prisma studio
-```
-
-Run any file
-
-```bash
-yarn ts-node src/xxx.ts
-```
-
-## How To Use?
-
-### SQLite, Express
-
-```bash
-yarn start
+git clone https://github.com/s-hirano-ist/blog.git
+yarn
+yarn prisma:dev
+docker compose up --build -d
 ```
 
 ## Tests
 
 ```bash
 yarn test
-yarn test:sh
 ```
 
 ## References
@@ -68,6 +48,12 @@ TypeScript導入
 tsc --init
 ```
 
+Run any file
+
+```bash
+yarn ts-node src/xxx.ts
+```
+
 ### Express
 
 ### Prisma
@@ -76,4 +62,18 @@ Prisma導入
 
 ```bash
 npx prisma init
+```
+
+Edit database with GUI
+
+```bash
+yarn prisma:studio
+```
+
+### PostgreSQL
+
+Connect to PostgreSQL
+
+```bash
+psql -h 127.0.0.1 -U sola -p 5555 rss-db
 ```
