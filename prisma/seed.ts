@@ -7,7 +7,7 @@ async function main() {
     const sampleData1 = await prisma.news.create({
       // UPSERT: if already exists then update, otherwise create
       data: {
-        title: "A",
+        heading: "A",
         description: "sample A",
         newsDetail: {
           create: [{ title: "sample detail A", url: "https://google.com" }],
@@ -19,7 +19,7 @@ async function main() {
       where: { id: 2 },
       update: {},
       create: {
-        title: "B",
+        heading: "B",
         description: "sample B",
         newsDetail: {
           create: [{ title: "sample detail B", url: "https://google.com" }],
@@ -31,7 +31,7 @@ async function main() {
       where: { id: 3 },
       update: {},
       create: {
-        title: "C",
+        heading: "C",
         description: "sample C",
         newsDetail: {
           create: [{ title: "sample detail C", url: "https://google.com" }],

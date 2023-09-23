@@ -1,7 +1,7 @@
 -- CreateTable
 CREATE TABLE "news" (
     "id" SERIAL NOT NULL,
-    "title" TEXT NOT NULL,
+    "heading" TEXT NOT NULL,
     "description" TEXT NOT NULL,
 
     CONSTRAINT "news_pkey" PRIMARY KEY ("id")
@@ -21,7 +21,7 @@ CREATE TABLE "news_detail" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "news_title_key" ON "news"("title");
+CREATE UNIQUE INDEX "news_heading_key" ON "news"("heading");
 
 -- AddForeignKey
 ALTER TABLE "news_detail" ADD CONSTRAINT "news_detail_news_id_fkey" FOREIGN KEY ("news_id") REFERENCES "news"("id") ON DELETE CASCADE ON UPDATE CASCADE;

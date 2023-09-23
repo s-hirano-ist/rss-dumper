@@ -52,7 +52,7 @@ export const getNewsDetailById = async (
   }
 };
 
-export const createNewsDetailByNewsTitle = async (
+export const createNewsDetailByNewsHeading = async (
   request: Request,
   response: Response,
 ) => {
@@ -63,10 +63,10 @@ export const createNewsDetailByNewsTitle = async (
     );
     const title = sanitizeHtml(validatedValue.title as string);
     const url = sanitizeHtml(validatedValue.url as string);
-    const quote = validatedValue.quote as string; // FIXME: no sanitize for inline HTML
+    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
 
     const news = await prisma.news.findUniqueOrThrow({
-      where: { title: request.params.title },
+      where: { heading: request.params.heading },
       select: { id: true },
     });
 
@@ -88,10 +88,40 @@ export const createNewsDetailByNewsTitle = async (
 };
 
 // TODO:
-// export const createNewsAndNewsDetail = async (
-//   request: Request,
-//   response: Response,
-// ) => {};
+export const createNewsAndNewsDetail = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const validatedValue = await newsDetailPostSchema.validateAsync(
+      request.body,
+      { abortEarly: false },
+    );
+    const title = sanitizeHtml(validatedValue.title as string);
+    const url = sanitizeHtml(validatedValue.url as string);
+    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
+
+    const news = await prisma.news.findUniqueOrThrow({
+      where: { heading: request.params.heading },
+      select: { id: true },
+    });
+
+    const data = await prisma.newsDetail.create({
+      data: { title, url, quote, newsId: news.id },
+      select: { title: true, url: true, quote: true },
+    });
+    response.status(201).json(data);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError(response, error.message);
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      prismaError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
+  }
+};
 
 // export const updateNewsDetailById = async (
 //   request: Request,

@@ -2,7 +2,7 @@ import { Router } from "express";
 import {
   getAllNewsDetail,
   getNewsDetailById,
-  createNewsDetailByNewsTitle,
+  createNewsDetailByNewsHeading,
   // createNewsAndNewsDetail,
   // updateNewsDetailById,
   // deleteAllNewsDetail,
@@ -14,7 +14,7 @@ const router = Router();
 router.get("/", getAllNewsDetail);
 router.get("/:id", getNewsDetailById);
 
-router.post("/:title", createNewsDetailByNewsTitle);
+router.post("/:heading", createNewsDetailByNewsHeading);
 // router.post("/:title/new", createNewsAndNewsDetail);
 
 // router.patch("/:title", updateNewsDetailById);

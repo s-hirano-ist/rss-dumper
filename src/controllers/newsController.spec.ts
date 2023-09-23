@@ -15,8 +15,6 @@ describe("userController test", () => {
     server.close();
   });
 
-  type UpdateDataType = { description: string };
-
   describe("GET /v1/news", () => {
     test("response with success", async () => {
       await Promise.all(
@@ -27,7 +25,7 @@ describe("userController test", () => {
         }),
       );
       const news = await prisma.news.findMany({
-        select: { title: true, description: true },
+        select: { heading: true, description: true },
       });
 
       const response = await supertest(app).get("/v1/news");
@@ -36,16 +34,16 @@ describe("userController test", () => {
     });
   });
 
-  describe("GET /v1/news/:title", () => {
+  describe("GET /v1/news/:heading", () => {
     test("response with success", async () => {
       const d = testData.noNewsDetail;
       await prisma.news.create({ data: d });
       const news = await prisma.news.findUnique({
-        where: { title: d.title },
-        select: { title: true, description: true },
+        where: { heading: d.heading },
+        select: { heading: true, description: true },
       });
 
-      const response = await supertest(app).get(`/v1/news/${d.title}`);
+      const response = await supertest(app).get(`/v1/news/${d.heading}`);
       expect(response.status).toBe(200);
       expect(response.body).toEqual(news);
     });
@@ -53,27 +51,27 @@ describe("userController test", () => {
       const d = testData.noNewsDetail;
       await prisma.news.create({ data: d });
       await prisma.news.findUnique({
-        where: { title: d.title },
-        select: { title: true, description: true },
+        where: { heading: d.heading },
+        select: { heading: true, description: true },
       });
 
-      const unknownTitle = "XXX";
-      const response = await supertest(app).get(`/v1/news/${unknownTitle}`);
+      const unknownHeading = "XXX";
+      const response = await supertest(app).get(`/v1/news/${unknownHeading}`);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });
     });
   });
 
-  describe("GET /v1/news/:title/all", () => {
+  describe("GET /v1/news/:heading/all", () => {
     test("response with success", async () => {
       const d = testData.withNewsDetail;
       await prisma.news.create({ data: d });
       const news = await prisma.news.findUnique({
-        where: { title: d.title },
-        select: { title: true, description: true, newsDetail: true },
+        where: { heading: d.heading },
+        select: { heading: true, description: true, newsDetail: true },
       });
 
-      const response = await supertest(app).get(`/v1/news/${d.title}/all`);
+      const response = await supertest(app).get(`/v1/news/${d.heading}/all`);
       expect(response.status).toBe(200);
       expect(response.body).toEqual(news);
     });
@@ -103,7 +101,7 @@ describe("userController test", () => {
     });
     test("ERROR: missing key", async () => {
       const d = testData.noNewsDetail;
-      const missingKeyBody = { title: d.title };
+      const missingKeyBody = { heading: d.heading };
       const response = await supertest(app)
         .post("/v1/news")
         .send(missingKeyBody);
@@ -118,7 +116,7 @@ describe("userController test", () => {
     test("ERROR: invalid key", async () => {
       const d = testData.noNewsDetail;
       const invalidKeyBody = {
-        invalidKey: d.title,
+        invalidKey: d.heading,
         description: d.description,
       };
       const response = await supertest(app)
@@ -127,7 +125,7 @@ describe("userController test", () => {
 
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
-        message: 'ERROR: "title" is required. "invalidKey" is not allowed',
+        message: 'ERROR: "heading" is required. "invalidKey" is not allowed',
       });
       const news = await prisma.news.findMany();
       expect(news.length).toBe(0);
@@ -135,7 +133,7 @@ describe("userController test", () => {
     test("ERROR: invalid type", async () => {
       const d = testData.noNewsDetail;
       const invalidTypeBody = {
-        title: d.title,
+        heading: d.heading,
         description: 123,
       };
       const response = await supertest(app)
@@ -151,25 +149,25 @@ describe("userController test", () => {
     });
   });
 
-  describe("PATCH /v1/news/:title", () => {
+  describe("PATCH /v1/news/:heading", () => {
     test("response with success", async () => {
       const d = testData.noNewsDetail;
       await prisma.news.create({
         data: d,
       });
       const description = "updated description";
-      const body: UpdateDataType = { description: description };
+      const body = { description: description };
 
       const response = await supertest(app)
-        .patch(`/v1/news/${d.title}`)
+        .patch(`/v1/news/${d.heading}`)
         .send(body);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual({ message: `Updated ${d.title}` });
+      expect(response.body).toEqual({ message: `Updated ${d.heading}` });
 
       const updatedNews = await prisma.news.findUnique({
-        where: { title: d.title },
+        where: { heading: d.heading },
       });
-      expect(updatedNews?.title).toEqual(d.title);
+      expect(updatedNews?.heading).toEqual(d.heading);
       expect(updatedNews?.description).toEqual(body.description);
 
       const news = await prisma.news.findMany();
@@ -177,11 +175,11 @@ describe("userController test", () => {
     });
     test("ERROR: not found", async () => {
       const description = "updated description";
-      const body: UpdateDataType = { description: description };
+      const body = { description: description };
 
-      const unknownTitle = "XXX";
+      const unknownHeading = "XXX";
       const response = await supertest(app)
-        .patch(`/v1/news/${unknownTitle}`)
+        .patch(`/v1/news/${unknownHeading}`)
         .send(body);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });
@@ -194,7 +192,7 @@ describe("userController test", () => {
         invalidKey: "updated description",
       };
       const response = await supertest(app)
-        .patch(`/v1/news/${d.title}`)
+        .patch(`/v1/news/${d.heading}`)
         .send(invalidKeyBody);
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
@@ -210,7 +208,7 @@ describe("userController test", () => {
         description: 123,
       };
       const response = await supertest(app)
-        .patch(`/v1/news/${d.title}`)
+        .patch(`/v1/news/${d.heading}`)
         .send(invalidTypeBody);
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
@@ -241,7 +239,7 @@ describe("userController test", () => {
       expect(newsDetail.length).toBe(0);
     });
   });
-  describe("DELETE /v1/news/:title", () => {
+  describe("DELETE /v1/news/:heading", () => {
     test("response with success", async () => {
       await Promise.all(
         Object.values(testData).map(async d => {
@@ -251,9 +249,9 @@ describe("userController test", () => {
         }),
       );
       const d = testData.withNewsDetail;
-      const response = await supertest(app).delete(`/v1/news/${d.title}`);
+      const response = await supertest(app).delete(`/v1/news/${d.heading}`);
       expect(response.status).toBe(200);
-      expect(response.body).toEqual({ message: `Deleted ${d.title}` });
+      expect(response.body).toEqual({ message: `Deleted ${d.heading}` });
 
       const news = await prisma.news.findMany();
       expect(news.length).toBe(2);
@@ -262,8 +260,10 @@ describe("userController test", () => {
       expect(newsDetail.length).toBe(0);
     });
     test("ERROR: not found", async () => {
-      const unknownTitle = "XXX";
-      const response = await supertest(app).delete(`/v1/news/${unknownTitle}`);
+      const unknownHeading = "XXX";
+      const response = await supertest(app).delete(
+        `/v1/news/${unknownHeading}`,
+      );
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });
 

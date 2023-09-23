@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const titleSchema = Joi.string()
+const headingSchema = Joi.string()
   .min(2)
   .max(16)
   // only contain "a" to "z" or "-", separator "-" and does not finish with "-".
@@ -10,7 +10,7 @@ const titleSchema = Joi.string()
 const descriptionSchema = Joi.string().min(2).required();
 
 export const newsPostSchema = Joi.object().keys({
-  title: titleSchema,
+  heading: headingSchema,
   description: descriptionSchema,
 });
 
@@ -25,5 +25,5 @@ export const idSchema = Joi.object().keys({
 export const newsDetailPostSchema = Joi.object().keys({
   title: Joi.string().required(),
   url: Joi.string().uri().required(),
-  quote: Joi.string().default(""),
+  quote: Joi.string().optional().default(""),
 });

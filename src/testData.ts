@@ -1,7 +1,7 @@
 export const testData = {
-  noNewsDetail: { title: "test-a", description: "description A" },
+  noNewsDetail: { heading: "test-a", description: "description A" },
   withNewsDetail: {
-    title: "test-b",
+    heading: "test-b",
     description: "description B",
     newsDetail: {
       create: [
@@ -15,5 +15,5 @@ export const testData = {
       ],
     },
   },
-  other1: { title: "test-c", description: "description C" },
+  other1: { heading: "test-c", description: "description C" },
 };

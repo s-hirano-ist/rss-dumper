@@ -25,10 +25,7 @@ describe("userController test", () => {
         }),
       );
       const newsDetail = await prisma.newsDetail.findMany({
-        select: {
-          title: true,
-          url: true,
-        },
+        select: { title: true, url: true },
       });
 
       const response = await supertest(app).get("/v1/news-detail");
@@ -41,7 +38,7 @@ describe("userController test", () => {
       const d = testData.withNewsDetail;
       await prisma.news.create({ data: d });
 
-      const id = 1; // TODO: delete magic number
+      const id = 1; // FIXME: delete magic number
       const newsDetail = await prisma.newsDetail.findUnique({
         where: { id: id },
         select: {
@@ -61,12 +58,8 @@ describe("userController test", () => {
     test("ERROR: row not found", async () => {
       const d = testData.withNewsDetail;
       await prisma.news.create({ data: d });
-      await prisma.news.findUnique({
-        where: { title: d.title },
-        select: { title: true, description: true },
-      });
 
-      const unknownId = 99999;
+      const unknownId = 99999; // FIXME: delete magic number
       const response = await supertest(app).get(`/v1/news-detail/${unknownId}`);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });
@@ -83,14 +76,14 @@ describe("userController test", () => {
       });
     });
   });
-  describe("POST /v1/news-detail/:title", () => {
+  describe("POST /v1/news-detail/:heading", () => {
     test("response with success (with quote)", async () => {
       const d = testData.noNewsDetail;
       await prisma.news.create({ data: d });
       const body = testData.withNewsDetail.newsDetail.create[0];
 
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.title}`)
+        .post(`/v1/news-detail/${d.heading}`)
         .send(body);
       expect(response.status).toBe(201);
       expect(response.body).toEqual(body);
@@ -106,7 +99,7 @@ describe("userController test", () => {
       await prisma.news.create({ data: d });
       const body = testData.withNewsDetail.newsDetail.create[1];
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.title}`)
+        .post(`/v1/news-detail/${d.heading}`)
         .send(body);
       expect(response.status).toBe(201);
 
@@ -122,7 +115,7 @@ describe("userController test", () => {
       await prisma.news.create({ data: d });
       const missingKeyBody = { url: "https://google.com" };
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.title}`)
+        .post(`/v1/news-detail/${d.heading}`)
         .send(missingKeyBody);
 
       expect(response.status).toBe(422);
@@ -140,7 +133,7 @@ describe("userController test", () => {
         invalidKey: "invalid",
       };
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.title}`)
+        .post(`/v1/news-detail/${d.heading}`)
         .send(invalidKeyBody);
 
       expect(response.status).toBe(422);
@@ -159,7 +152,7 @@ describe("userController test", () => {
         url: "https:google",
       };
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.title}`)
+        .post(`/v1/news-detail/${d.heading}`)
         .send(invalidKeyBody);
 
       expect(response.status).toBe(422);
@@ -172,8 +165,9 @@ describe("userController test", () => {
     });
     test("ERROR: not found", async () => {
       const body = testData.withNewsDetail.newsDetail.create[0];
+      const unknownHeading = "unknown";
       const response = await supertest(app)
-        .post(`/v1/news-detail/${body.title}`)
+        .post(`/v1/news-detail/${unknownHeading}`)
         .send(body);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });
