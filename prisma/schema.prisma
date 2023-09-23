@@ -24,8 +24,8 @@ model NewsDetail {
   published Boolean @default(false)
   favorite  Boolean @default(false)
   // TODO: 制約を追加 ここの理解必要
-  news      News?   @relation(fields: [newsId], references: [id], onDelete: Cascade)
-  newsId    Int?    @map("news_id")
+  news      News?   @relation(fields: [newsId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  newsId    Int     @map("news_id")
 
   @@map("news_detail")
 }

@@ -15,7 +15,7 @@ CREATE TABLE "news_detail" (
     "quote" TEXT,
     "published" BOOLEAN NOT NULL DEFAULT false,
     "favorite" BOOLEAN NOT NULL DEFAULT false,
-    "news_id" INTEGER,
+    "news_id" INTEGER NOT NULL,
 
     CONSTRAINT "news_detail_pkey" PRIMARY KEY ("id")
 );

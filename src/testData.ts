@@ -5,7 +5,11 @@ export const testData = {
     description: "description B",
     newsDetail: {
       create: [
-        { title: "sample B detail A", url: "https://aaa.com" },
+        {
+          title: "sample B detail A",
+          url: "https://aaa.com",
+          quote: "sample QUOTE",
+        },
         { title: "sample B detail B", url: "https://bbb.com" },
         { title: "sample B detail B", url: "https://ccc.com" },
       ],
