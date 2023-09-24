@@ -346,6 +346,121 @@ describe("userController test", () => {
     });
   });
 
+  describe("PATCH /v1/news-detail/toggle/favorite/:id", () => {
+    test("response with success", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const id = 1; // FIXME: delete magic number
+
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/toggle/favorite/${id}`)
+        .send({});
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: `Updated ${id}` });
+
+      const updatedNewsDetail = await prisma.newsDetail.findUnique({
+        where: { id },
+      });
+      expect(updatedNewsDetail?.title).toEqual(d.newsDetail.create[0].title);
+      expect(updatedNewsDetail?.url).toEqual(d.newsDetail.create[0].url);
+      expect(updatedNewsDetail?.quote).toEqual(d.newsDetail.create[0].quote);
+      expect(updatedNewsDetail?.favorite).toEqual(true);
+      expect(updatedNewsDetail?.published).toEqual(false);
+
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(3);
+    });
+    test("ERROR: not found", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const unknownId = 999; // FIXME: delete magic number
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/toggle/favorite/${unknownId}`)
+        .send({});
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+    test("ERROR: invalid id", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const invalidId = "aaa";
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/toggle/favorite/${invalidId}`)
+        .send({});
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message: 'ERROR: "id" must be a number',
+      });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+  });
+  describe("PATCH /v1/news-detail/toggle/published/:id", () => {
+    test("response with success", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const id = 1; // FIXME: delete magic number
+
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/toggle/published/${id}`)
+        .send({});
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: `Updated ${id}` });
+
+      const updatedNewsDetail = await prisma.newsDetail.findUnique({
+        where: { id },
+      });
+      expect(updatedNewsDetail?.title).toEqual(d.newsDetail.create[0].title);
+      expect(updatedNewsDetail?.url).toEqual(d.newsDetail.create[0].url);
+      expect(updatedNewsDetail?.quote).toEqual(d.newsDetail.create[0].quote);
+      expect(updatedNewsDetail?.favorite).toEqual(false);
+      expect(updatedNewsDetail?.published).toEqual(true);
+
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(3);
+    });
+    test("ERROR: not found", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const unknownId = 999; // FIXME: delete magic number
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/toggle/published/${unknownId}`)
+        .send({});
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+    test("ERROR: invalid id", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const invalidId = "aaa";
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/toggle/published/${invalidId}`)
+        .send({});
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message: 'ERROR: "id" must be a number',
+      });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+  });
+
   describe("DELETE /v1/news-detail/delete", () => {
     test("response with success", async () => {
       await Promise.all(
