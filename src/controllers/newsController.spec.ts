@@ -77,10 +77,10 @@ describe("userController test", () => {
     });
   });
 
-  describe("POST /v1/news", () => {
+  describe("POST /v1/news/create", () => {
     test("response with success", async () => {
       const body = testData.noNewsDetail;
-      const response = await supertest(app).post("/v1/news").send(body);
+      const response = await supertest(app).post("/v1/news/create").send(body);
       expect(response.status).toBe(201);
       expect(response.body).toEqual(body);
 
@@ -89,8 +89,10 @@ describe("userController test", () => {
     });
     test("ERROR: duplicate", async () => {
       const body = testData.noNewsDetail;
-      await supertest(app).post("/v1/news").send(body);
-      const secondResponse = await supertest(app).post("/v1/news").send(body);
+      await supertest(app).post("/v1/news/create").send(body);
+      const secondResponse = await supertest(app)
+        .post("/v1/news/create")
+        .send(body);
 
       expect(secondResponse.status).toBe(400);
       expect(secondResponse.body).toEqual({
@@ -103,7 +105,7 @@ describe("userController test", () => {
       const d = testData.noNewsDetail;
       const missingKeyBody = { heading: d.heading };
       const response = await supertest(app)
-        .post("/v1/news")
+        .post("/v1/news/create")
         .send(missingKeyBody);
 
       expect(response.status).toBe(422);
@@ -120,7 +122,7 @@ describe("userController test", () => {
         description: d.description,
       };
       const response = await supertest(app)
-        .post("/v1/news")
+        .post("/v1/news/create")
         .send(invalidKeyBody);
 
       expect(response.status).toBe(422);
@@ -137,7 +139,7 @@ describe("userController test", () => {
         description: 123,
       };
       const response = await supertest(app)
-        .post("/v1/news")
+        .post("/v1/news/create")
         .send(invalidTypeBody);
 
       expect(response.status).toBe(422);
@@ -149,7 +151,7 @@ describe("userController test", () => {
     });
   });
 
-  describe("PATCH /v1/news/:heading", () => {
+  describe("PATCH /v1/news/update/:heading", () => {
     test("response with success", async () => {
       const d = testData.noNewsDetail;
       await prisma.news.create({
@@ -159,7 +161,7 @@ describe("userController test", () => {
       const body = { description: description };
 
       const response = await supertest(app)
-        .patch(`/v1/news/${d.heading}`)
+        .patch(`/v1/news/update/${d.heading}`)
         .send(body);
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ message: `Updated ${d.heading}` });
@@ -179,7 +181,7 @@ describe("userController test", () => {
 
       const unknownHeading = "XXX";
       const response = await supertest(app)
-        .patch(`/v1/news/${unknownHeading}`)
+        .patch(`/v1/news/update/${unknownHeading}`)
         .send(body);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });
@@ -192,7 +194,7 @@ describe("userController test", () => {
         invalidKey: "updated description",
       };
       const response = await supertest(app)
-        .patch(`/v1/news/${d.heading}`)
+        .patch(`/v1/news/update/${d.heading}`)
         .send(invalidKeyBody);
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
@@ -208,7 +210,7 @@ describe("userController test", () => {
         description: 123,
       };
       const response = await supertest(app)
-        .patch(`/v1/news/${d.heading}`)
+        .patch(`/v1/news/update/${d.heading}`)
         .send(invalidTypeBody);
       expect(response.status).toBe(422);
       expect(response.body).toEqual({
@@ -219,7 +221,7 @@ describe("userController test", () => {
     });
   });
 
-  describe("DELETE /v1/news/", () => {
+  describe("DELETE /v1/news/delete", () => {
     test("response with success", async () => {
       await Promise.all(
         Object.values(testData).map(async d => {
@@ -228,7 +230,7 @@ describe("userController test", () => {
           });
         }),
       );
-      const response = await supertest(app).delete("/v1/news/");
+      const response = await supertest(app).delete("/v1/news/delete");
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ message: "Deleted all" });
 
@@ -239,7 +241,7 @@ describe("userController test", () => {
       expect(newsDetail.length).toBe(0);
     });
   });
-  describe("DELETE /v1/news/:heading", () => {
+  describe("DELETE /v1/news/delete/:heading", () => {
     test("response with success", async () => {
       await Promise.all(
         Object.values(testData).map(async d => {
@@ -249,7 +251,9 @@ describe("userController test", () => {
         }),
       );
       const d = testData.withNewsDetail;
-      const response = await supertest(app).delete(`/v1/news/${d.heading}`);
+      const response = await supertest(app).delete(
+        `/v1/news/delete/${d.heading}`,
+      );
       expect(response.status).toBe(200);
       expect(response.body).toEqual({ message: `Deleted ${d.heading}` });
 
@@ -262,7 +266,7 @@ describe("userController test", () => {
     test("ERROR: not found", async () => {
       const unknownHeading = "XXX";
       const response = await supertest(app).delete(
-        `/v1/news/${unknownHeading}`,
+        `/v1/news/delete/${unknownHeading}`,
       );
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });

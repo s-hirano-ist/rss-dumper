@@ -3,7 +3,7 @@ import {
   getAllNewsDetail,
   getNewsDetailById,
   createNewsDetailByNewsHeading,
-  // createNewsAndNewsDetail,
+  createNewsAndNewsDetail,
   // updateNewsDetailById,
   // deleteAllNewsDetail,
   // deleteNewsDetailById,
@@ -14,12 +14,12 @@ const router = Router();
 router.get("/", getAllNewsDetail);
 router.get("/:id", getNewsDetailById);
 
-router.post("/:heading", createNewsDetailByNewsHeading);
-// router.post("/:title/new", createNewsAndNewsDetail);
+router.post("/create/:heading", createNewsDetailByNewsHeading);
+router.post("/create", createNewsAndNewsDetail);
 
-// router.patch("/:title", updateNewsDetailById);
+// router.patch("/update/:id", updateNewsDetailById);
 
-// router.delete("/", deleteAllNewsDetail);
-// router.delete("/:id", deleteNewsDetailById);
+// router.delete("/delete", deleteAllNewsDetail);
+// router.delete("/delete/:id", deleteNewsDetailById);
 
 export default router;

@@ -76,14 +76,14 @@ describe("userController test", () => {
       });
     });
   });
-  describe("POST /v1/news-detail/:heading", () => {
+  describe("POST /v1/news-detail/create/:heading", () => {
     test("response with success (with quote)", async () => {
       const d = testData.noNewsDetail;
       await prisma.news.create({ data: d });
       const body = testData.withNewsDetail.newsDetail.create[0];
 
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.heading}`)
+        .post(`/v1/news-detail/create/${d.heading}`)
         .send(body);
       expect(response.status).toBe(201);
       expect(response.body).toEqual(body);
@@ -99,7 +99,7 @@ describe("userController test", () => {
       await prisma.news.create({ data: d });
       const body = testData.withNewsDetail.newsDetail.create[1];
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.heading}`)
+        .post(`/v1/news-detail/create/${d.heading}`)
         .send(body);
       expect(response.status).toBe(201);
 
@@ -115,7 +115,7 @@ describe("userController test", () => {
       await prisma.news.create({ data: d });
       const missingKeyBody = { url: "https://google.com" };
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.heading}`)
+        .post(`/v1/news-detail/create/${d.heading}`)
         .send(missingKeyBody);
 
       expect(response.status).toBe(422);
@@ -133,7 +133,7 @@ describe("userController test", () => {
         invalidKey: "invalid",
       };
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.heading}`)
+        .post(`/v1/news-detail/create/${d.heading}`)
         .send(invalidKeyBody);
 
       expect(response.status).toBe(422);
@@ -152,7 +152,7 @@ describe("userController test", () => {
         url: "https:google",
       };
       const response = await supertest(app)
-        .post(`/v1/news-detail/${d.heading}`)
+        .post(`/v1/news-detail/create/${d.heading}`)
         .send(invalidKeyBody);
 
       expect(response.status).toBe(422);
@@ -167,7 +167,7 @@ describe("userController test", () => {
       const body = testData.withNewsDetail.newsDetail.create[0];
       const unknownHeading = "unknown";
       const response = await supertest(app)
-        .post(`/v1/news-detail/${unknownHeading}`)
+        .post(`/v1/news-detail/create/${unknownHeading}`)
         .send(body);
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "ERROR: Not found" });

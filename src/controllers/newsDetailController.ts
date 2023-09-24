@@ -3,7 +3,11 @@ import { Request, Response } from "express";
 import { ValidationError } from "joi";
 import sanitizeHtml from "sanitize-html";
 import { prismaError, unknownError, validationError } from "../utils/error";
-import { idSchema, newsDetailPostSchema } from "../utils/schema";
+import {
+  idSchema,
+  newsAndNewsDetailPostSchema,
+  newsDetailPostSchema,
+} from "../utils/schema";
 
 const prisma = new PrismaClient();
 
@@ -70,11 +74,11 @@ export const createNewsDetailByNewsHeading = async (
       select: { id: true },
     });
 
-    const data = await prisma.newsDetail.create({
+    const newsDetail = await prisma.newsDetail.create({
       data: { title, url, quote, newsId: news.id },
       select: { title: true, url: true, quote: true },
     });
-    response.status(201).json(data);
+    response.status(201).json(newsDetail);
   } catch (error) {
     if (error instanceof ValidationError) {
       validationError(response, error.message);
@@ -87,30 +91,31 @@ export const createNewsDetailByNewsHeading = async (
   }
 };
 
-// TODO:
 export const createNewsAndNewsDetail = async (
   request: Request,
   response: Response,
 ) => {
   try {
-    const validatedValue = await newsDetailPostSchema.validateAsync(
+    const validatedValue = await newsAndNewsDetailPostSchema.validateAsync(
       request.body,
       { abortEarly: false },
     );
+    const heading = sanitizeHtml(validatedValue.heading as string);
+    const description = sanitizeHtml(validatedValue.description as string);
+
     const title = sanitizeHtml(validatedValue.title as string);
     const url = sanitizeHtml(validatedValue.url as string);
     const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
 
-    const news = await prisma.news.findUniqueOrThrow({
-      where: { heading: request.params.heading },
+    const news = await prisma.news.create({
+      data: { heading, description },
       select: { id: true },
     });
-
-    const data = await prisma.newsDetail.create({
+    const newsDetail = await prisma.newsDetail.create({
       data: { title, url, quote, newsId: news.id },
       select: { title: true, url: true, quote: true },
     });
-    response.status(201).json(data);
+    response.status(201).json(newsDetail);
   } catch (error) {
     if (error instanceof ValidationError) {
       validationError(response, error.message);
