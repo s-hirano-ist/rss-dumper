@@ -25,7 +25,7 @@ export const idSchema = Joi.object().keys({
   id: Joi.number().required().integer().min(1),
 });
 
-export const newsDetailPostSchema = Joi.object().keys({
+export const newsDetailSchema = Joi.object().keys({
   title: titleSchema,
   url: urlSchema,
   quote: quoteSchema,

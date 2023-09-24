@@ -253,4 +253,180 @@ describe("userController test", () => {
       expect(newsDetail.length).toBe(0);
     });
   });
+
+  describe("PATCH /v1/news-detail/update/:id", () => {
+    test("response with success", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const body = {
+        title: "updated title",
+        url: "https://updated.com",
+        quote: "updated quote",
+      };
+
+      const id = 1; // FIXME: delete magic number
+
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/update/${id}`)
+        .send(body);
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: `Updated ${id}` });
+
+      const updatedNewsDetail = await prisma.newsDetail.findUnique({
+        where: { id },
+      });
+      expect(updatedNewsDetail?.title).toEqual(body.title);
+      expect(updatedNewsDetail?.url).toEqual(body.url);
+      expect(updatedNewsDetail?.quote).toEqual(body.quote);
+
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(3);
+    });
+    test("ERROR: not found", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const body = {
+        title: "updated title",
+        url: "https://updated.com",
+        quote: "updated quote",
+      };
+      const unknownId = 999; // FIXME: delete magic number
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/update/${unknownId}`)
+        .send(body);
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+    test("ERROR: invalid key", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const invalidTypeBody = {
+        title: "updated title",
+        description: 123,
+        quote: "updated quote",
+      };
+      const id = 1; // FIXME: delete magic number
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/update/${id}`)
+        .send(invalidTypeBody);
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message: 'ERROR: "url" is required. "description" is not allowed',
+      });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+    test("ERROR: invalid type", async () => {
+      const d = testData.withNewsDetail;
+      await prisma.news.create({
+        data: d,
+      });
+      const invalidTypeBody = {
+        title: "updated title",
+        url: "invalid URL",
+      };
+      const id = 1; // FIXME: delete magic number
+      const response = await supertest(app)
+        .patch(`/v1/news-detail/update/${id}`)
+        .send(invalidTypeBody);
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message: 'ERROR: "url" must be a valid uri',
+      });
+      const news = await prisma.newsDetail.findMany();
+      expect(news.length).toBe(3);
+    });
+  });
+
+  describe("DELETE /v1/news-detail/delete", () => {
+    test("response with success", async () => {
+      await Promise.all(
+        Object.values(testData).map(async d => {
+          await prisma.news.create({
+            data: d,
+          });
+        }),
+      );
+      const response = await supertest(app).delete("/v1/news-detail/delete");
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: "Deleted all" });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(3); // news should not be deleted
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(0);
+    });
+  });
+  describe("DELETE /v1/news-detail/delete/:id", () => {
+    test("response with success", async () => {
+      await Promise.all(
+        Object.values(testData).map(async d => {
+          await prisma.news.create({
+            data: d,
+          });
+        }),
+      );
+      const id = 1; // FIXME: delete magic number
+      const response = await supertest(app).delete(
+        `/v1/news-detail/delete/${id}`,
+      );
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual({ message: `Deleted ${id}` });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(3);
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(2);
+    });
+    test("ERROR: not found", async () => {
+      await Promise.all(
+        Object.values(testData).map(async d => {
+          await prisma.news.create({
+            data: d,
+          });
+        }),
+      );
+      const unknownId = 99999; // FIXME: delete magic number
+      const response = await supertest(app).delete(
+        `/v1/news-detail/delete/${unknownId}`,
+      );
+      expect(response.status).toBe(404);
+      expect(response.body).toEqual({ message: "ERROR: Not found" });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(3);
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(3);
+    });
+    test("ERROR: not found", async () => {
+      await Promise.all(
+        Object.values(testData).map(async d => {
+          await prisma.news.create({
+            data: d,
+          });
+        }),
+      );
+      const invalidId = "aaa";
+      const response = await supertest(app).delete(
+        `/v1/news-detail/delete/${invalidId}`,
+      );
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message: 'ERROR: "id" must be a number',
+      });
+
+      const news = await prisma.news.findMany();
+      expect(news.length).toBe(3);
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(3);
+    });
+  });
 });

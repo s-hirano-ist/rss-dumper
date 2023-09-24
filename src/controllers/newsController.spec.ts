@@ -33,7 +33,6 @@ describe("userController test", () => {
       expect(response.body).toEqual(news);
     });
   });
-
   describe("GET /v1/news/:heading", () => {
     test("response with success", async () => {
       const d = testData.noNewsDetail;
@@ -61,7 +60,6 @@ describe("userController test", () => {
       expect(response.body).toEqual({ message: "ERROR: Not found" });
     });
   });
-
   describe("GET /v1/news/:heading/all", () => {
     test("response with success", async () => {
       const d = testData.withNewsDetail;

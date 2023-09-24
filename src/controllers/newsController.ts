@@ -89,11 +89,12 @@ export const updateNewsByHeading = async (
       abortEarly: false,
     });
     const description = sanitizeHtml(validatedValue.description as string);
-    const data = await prisma.news.update({
-      where: { heading: request.params.heading },
+    const heading = request.params.heading;
+    await prisma.news.update({
+      where: { heading },
       data: { description },
     });
-    sendInfoResponse(response, 200, `Updated ${data.heading}`);
+    sendInfoResponse(response, 200, `Updated ${heading}`);
   } catch (error) {
     if (error instanceof ValidationError) {
       validationError(response, error.message);
@@ -121,10 +122,11 @@ export const deleteNewsByHeading = async (
   response: Response,
 ) => {
   try {
-    const data = await prisma.news.delete({
-      where: { heading: request.params.heading },
+    const heading = request.params.heading;
+    await prisma.news.delete({
+      where: { heading },
     });
-    sendInfoResponse(response, 200, `Deleted ${data.heading}`);
+    sendInfoResponse(response, 200, `Deleted ${heading}`);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);

@@ -3,10 +3,11 @@ import { Request, Response } from "express";
 import { ValidationError } from "joi";
 import sanitizeHtml from "sanitize-html";
 import { prismaError, unknownError, validationError } from "../utils/error";
+import { sendInfoResponse } from "../utils/response";
 import {
   idSchema,
   newsAndNewsDetailPostSchema,
-  newsDetailPostSchema,
+  newsDetailSchema,
 } from "../utils/schema";
 
 const prisma = new PrismaClient();
@@ -96,10 +97,9 @@ export const createNewsDetailByNewsHeading = async (
   response: Response,
 ) => {
   try {
-    const validatedValue = await newsDetailPostSchema.validateAsync(
-      request.body,
-      { abortEarly: false },
-    );
+    const validatedValue = await newsDetailSchema.validateAsync(request.body, {
+      abortEarly: false,
+    });
     const title = sanitizeHtml(validatedValue.title as string);
     const url = sanitizeHtml(validatedValue.url as string);
     const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
@@ -126,17 +126,69 @@ export const createNewsDetailByNewsHeading = async (
   }
 };
 
-// export const updateNewsDetailById = async (
-//   request: Request,
-//   response: Response,
-// ) => {};
+export const updateNewsDetailById = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const validatedValue = await newsDetailSchema.validateAsync(request.body, {
+      abortEarly: false,
+    });
+    const title = sanitizeHtml(validatedValue.title as string);
+    const url = sanitizeHtml(validatedValue.url as string);
+    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
 
-// export const deleteAllNewsDetail = async (
-//   request: Request,
-//   response: Response,
-// ) => {};
+    const validatedId = await idSchema.validateAsync(request.params, {
+      abortEarly: false,
+    });
+    await prisma.newsDetail.update({
+      where: { id: validatedId.id },
+      data: { title, url, quote },
+    });
+    sendInfoResponse(response, 200, `Updated ${validatedId.id}`);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError(response, error.message);
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      prismaError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
+  }
+};
 
-// export const deleteNewsDetailById = async (
-//   request: Request,
-//   response: Response,
-// ) => {};
+export const deleteAllNewsDetail = async (_: Request, response: Response) => {
+  try {
+    await prisma.newsDetail.deleteMany();
+    sendInfoResponse(response, 200, "Deleted all");
+  } catch (error) {
+    /* istanbul ignore next */
+    unknownError(response, error);
+  }
+};
+
+export const deleteNewsDetailById = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const validatedId = await idSchema.validateAsync(request.params, {
+      abortEarly: false,
+    });
+
+    await prisma.newsDetail.delete({
+      where: { id: validatedId.id },
+    });
+    sendInfoResponse(response, 200, `Deleted ${validatedId.id}`);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError(response, error.message);
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      prismaError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
+  }
+};
