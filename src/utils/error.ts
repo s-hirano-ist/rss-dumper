@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import type { Response } from "express";
-import { sendInfoResponse } from "./response";
+import { sendInfoResponse } from "./response.ts";
 
 export function prismaError(
   response: Response,

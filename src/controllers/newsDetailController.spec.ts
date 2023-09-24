@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import supertest from "supertest";
-import { app, server } from "../app";
-import { testData } from "../testData";
-import resetDatabase from "../utils/resetDatabase";
+import { app, server } from "../app.ts";
+import { testData } from "../testData.ts";
+import resetDatabase from "../utils/resetDatabase.ts";
 
 const prisma = new PrismaClient();
 

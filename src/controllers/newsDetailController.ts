@@ -1,14 +1,14 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { ValidationError } from "joi";
+import joi from "joi";
 import sanitizeHtml from "sanitize-html";
-import { prismaError, unknownError, validationError } from "../utils/error";
-import { sendInfoResponse } from "../utils/response";
+import { prismaError, unknownError, validationError } from "../utils/error.ts";
+import { sendInfoResponse } from "../utils/response.ts";
 import {
   idSchema,
   newsAndNewsDetailPostSchema,
   newsDetailSchema,
-} from "../utils/schema";
+} from "../utils/schema.ts";
 
 const prisma = new PrismaClient();
 
@@ -46,7 +46,7 @@ export const getNewsDetailById = async (
     });
     response.status(200).json(newsDetail);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError)
       prismaError(response, error);
@@ -83,7 +83,7 @@ export const createNewsAndNewsDetail = async (
     });
     response.status(201).json(newsDetail);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else {
       /* istanbul ignore next */
@@ -115,7 +115,7 @@ export const createNewsDetailByNewsHeading = async (
     });
     response.status(201).json(newsDetail);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
@@ -147,7 +147,7 @@ export const updateNewsDetailById = async (
     });
     sendInfoResponse(response, 200, `Updated ${validatedId.id}`);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
@@ -182,7 +182,7 @@ export const deleteNewsDetailById = async (
     });
     sendInfoResponse(response, 200, `Deleted ${validatedId.id}`);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
@@ -211,7 +211,7 @@ export const toggleFavoriteById = async (
     });
     sendInfoResponse(response, 200, `Updated ${validatedValue.id}`);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
@@ -239,7 +239,7 @@ export const togglePublishedById = async (
     });
     sendInfoResponse(response, 200, `Updated ${validatedValue.id}`);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);

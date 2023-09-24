@@ -7,7 +7,7 @@ import {
   updateNewsByHeading,
   deleteAllNews,
   deleteNewsByHeading,
-} from "../controllers/newsController";
+} from "../controllers/newsController.ts";
 
 const router = Router();
 

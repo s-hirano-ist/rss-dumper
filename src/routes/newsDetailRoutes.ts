@@ -9,7 +9,7 @@ import {
   deleteNewsDetailById,
   toggleFavoriteById,
   togglePublishedById,
-} from "../controllers/newsDetailController";
+} from "../controllers/newsDetailController.ts";
 
 const router = Router();
 

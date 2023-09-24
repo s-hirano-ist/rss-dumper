@@ -1,10 +1,10 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
-import { ValidationError } from "joi";
+import joi from "joi";
 import sanitizeHtml from "sanitize-html";
-import { prismaError, unknownError, validationError } from "../utils/error";
-import { sendInfoResponse } from "../utils/response";
-import { newsPostSchema, newsPatchSchema } from "../utils/schema";
+import { prismaError, unknownError, validationError } from "../utils/error.ts";
+import { sendInfoResponse } from "../utils/response.ts";
+import { newsPostSchema, newsPatchSchema } from "../utils/schema.ts";
 
 const prisma = new PrismaClient();
 
@@ -69,7 +69,7 @@ export const createNews = async (request: Request, response: Response) => {
     });
     response.status(201).json(data);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
@@ -96,7 +96,7 @@ export const updateNewsByHeading = async (
     });
     sendInfoResponse(response, 200, `Updated ${heading}`);
   } catch (error) {
-    if (error instanceof ValidationError) {
+    if (error instanceof joi.ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
