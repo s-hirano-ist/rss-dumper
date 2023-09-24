@@ -192,3 +192,60 @@ export const deleteNewsDetailById = async (
     }
   }
 };
+
+export const toggleFavoriteById = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const validatedValue = await idSchema.validateAsync(request.params, {
+      abortEarly: false,
+    });
+    const currentValue = await prisma.newsDetail.findUniqueOrThrow({
+      where: { id: validatedValue.id },
+      select: { favorite: true },
+    });
+    await prisma.newsDetail.update({
+      where: { id: validatedValue.id },
+      data: { favorite: !currentValue.favorite },
+    });
+    sendInfoResponse(response, 200, `Updated ${validatedValue.id}`);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError(response, error.message);
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      prismaError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
+  }
+};
+export const togglePublishedById = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const validatedValue = await idSchema.validateAsync(request.params, {
+      abortEarly: false,
+    });
+    const currentValue = await prisma.newsDetail.findUniqueOrThrow({
+      where: { id: validatedValue.id },
+      select: { published: true },
+    });
+    await prisma.newsDetail.update({
+      where: { id: validatedValue.id },
+      data: { published: !currentValue.published },
+    });
+    sendInfoResponse(response, 200, `Updated ${validatedValue.id}`);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError(response, error.message);
+    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      prismaError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
+  }
+};
