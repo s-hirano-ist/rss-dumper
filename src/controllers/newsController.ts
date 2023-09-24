@@ -11,25 +11,47 @@ const prisma = new PrismaClient();
 export const getAllNews = async (_: Request, response: Response) => {
   try {
     const allNews = await prisma.news.findMany({
-      select: { title: true, description: true },
+      select: { heading: true, description: true },
     });
     response.status(200).json(allNews);
   } catch (error) {
+    /* istanbul ignore next */
     unknownError(response, error);
   }
 };
 
-export const getNewsByTitle = async (request: Request, response: Response) => {
+export const getNewsByHeading = async (
+  request: Request,
+  response: Response,
+) => {
+  await getNews(request, response, false);
+};
+
+export const getNewsAndNewsDetailByHeading = async (
+  request: Request,
+  response: Response,
+) => {
+  await getNews(request, response, true);
+};
+
+const getNews = async (
+  request: Request,
+  response: Response,
+  showNewsDetail: boolean,
+) => {
   try {
     const news = await prisma.news.findUniqueOrThrow({
-      where: { title: request.params.title },
-      select: { title: true, description: true },
+      where: { heading: request.params.heading },
+      select: { heading: true, description: true, newsDetail: showNewsDetail },
     });
     response.status(200).json(news);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError)
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
-    else unknownError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
   }
 };
 
@@ -38,12 +60,12 @@ export const createNews = async (request: Request, response: Response) => {
     const validatedValue = await newsPostSchema.validateAsync(request.body, {
       abortEarly: false,
     });
-    const title = sanitizeHtml(validatedValue.title as string);
+    const heading = sanitizeHtml(validatedValue.heading as string);
     const description = sanitizeHtml(validatedValue.description as string);
 
     const data = await prisma.news.create({
-      data: { title, description },
-      select: { title: true, description: true },
+      data: { heading, description },
+      select: { heading: true, description: true },
     });
     response.status(201).json(data);
   } catch (error) {
@@ -52,12 +74,13 @@ export const createNews = async (request: Request, response: Response) => {
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
     } else {
+      /* istanbul ignore next */
       unknownError(response, error);
     }
   }
 };
 
-export const updateNewsByTitle = async (
+export const updateNewsByHeading = async (
   request: Request,
   response: Response,
 ) => {
@@ -66,17 +89,19 @@ export const updateNewsByTitle = async (
       abortEarly: false,
     });
     const description = sanitizeHtml(validatedValue.description as string);
-    const data = await prisma.news.update({
-      where: { title: request.params.title },
+    const heading = request.params.heading;
+    await prisma.news.update({
+      where: { heading },
       data: { description },
     });
-    sendInfoResponse(response, 200, `Updated ${data.title}`);
+    sendInfoResponse(response, 200, `Updated ${heading}`);
   } catch (error) {
     if (error instanceof ValidationError) {
       validationError(response, error.message);
     } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
     } else {
+      /* istanbul ignore next */
       unknownError(response, error);
     }
   }
@@ -87,22 +112,27 @@ export const deleteAllNews = async (_: Request, response: Response) => {
     await prisma.news.deleteMany();
     sendInfoResponse(response, 200, "Deleted all");
   } catch (error) {
+    /* istanbul ignore next */
     unknownError(response, error);
   }
 };
 
-export const deleteNewsByTitle = async (
+export const deleteNewsByHeading = async (
   request: Request,
   response: Response,
 ) => {
   try {
-    const data = await prisma.news.delete({
-      where: { title: request.params.title },
+    const heading = request.params.heading;
+    await prisma.news.delete({
+      where: { heading },
     });
-    sendInfoResponse(response, 200, `Deleted ${data.title}`);
+    sendInfoResponse(response, 200, `Deleted ${heading}`);
   } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError)
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
       prismaError(response, error);
-    else unknownError(response, error);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
   }
 };

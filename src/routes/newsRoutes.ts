@@ -1,23 +1,25 @@
 import { Router } from "express";
 import {
   getAllNews,
-  getNewsByTitle,
+  getNewsByHeading,
+  getNewsAndNewsDetailByHeading,
   createNews,
-  updateNewsByTitle,
+  updateNewsByHeading,
   deleteAllNews,
-  deleteNewsByTitle,
+  deleteNewsByHeading,
 } from "../controllers/newsController";
 
 const router = Router();
 
 router.get("/", getAllNews);
-router.get("/:title", getNewsByTitle);
+router.get("/:heading", getNewsByHeading);
+router.get("/:heading/all", getNewsAndNewsDetailByHeading);
 
-router.post("/", createNews);
+router.post("/create", createNews);
 
-router.patch("/:title", updateNewsByTitle);
+router.patch("/update/:heading", updateNewsByHeading);
 
-router.delete("/", deleteAllNews);
-router.delete("/:title", deleteNewsByTitle);
+router.delete("/delete", deleteAllNews);
+router.delete("/delete/:heading", deleteNewsByHeading);
 
 export default router;

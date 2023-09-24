@@ -35,7 +35,7 @@ curl -s http://localhost:8080/v1/news/
 curl -s http://localhost:8080/v1/news/testA
 
 # POST
-curl -s -d '{"title": "testA", "description": "test description A"}' -H 'Content-Type: application/json' http://localhost:8080/v1/news
+curl -s -d '{"heading": "testA", "description": "test description A"}' -H 'Content-Type: application/json' http://localhost:8080/v1/news
 
 # PATCH
 curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH http://localhost:8080/v1/news/testA
