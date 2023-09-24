@@ -71,7 +71,7 @@ export const createNewsAndNewsDetail = async (
 
     const title = sanitizeHtml(validatedValue.title as string);
     const url = sanitizeHtml(validatedValue.url as string);
-    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
+    const quote = sanitizeHtml(validatedValue.quote as string);
 
     const news = await prisma.news.create({
       data: { heading, description },
@@ -102,7 +102,7 @@ export const createNewsDetailByNewsHeading = async (
     });
     const title = sanitizeHtml(validatedValue.title as string);
     const url = sanitizeHtml(validatedValue.url as string);
-    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
+    const quote = sanitizeHtml(validatedValue.quote as string);
 
     const news = await prisma.news.findUniqueOrThrow({
       where: { heading: request.params.heading },
@@ -136,7 +136,7 @@ export const updateNewsDetailById = async (
     });
     const title = sanitizeHtml(validatedValue.title as string);
     const url = sanitizeHtml(validatedValue.url as string);
-    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
+    const quote = sanitizeHtml(validatedValue.quote as string);
 
     const validatedId = await idSchema.validateAsync(request.params, {
       abortEarly: false,
