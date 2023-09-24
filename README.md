@@ -32,17 +32,17 @@ yarn test
 ```bash
 # GET
 curl -s http://localhost:8080/v1/news/
-curl -s http://localhost:8080/v1/news/testA
+curl -s http://localhost:8080/v1/news/test-a
 
 # POST
-curl -s -d '{"heading": "testA", "description": "test description A"}' -H 'Content-Type: application/json' http://localhost:8080/v1/news
+curl -s -d '{"heading": "test-a", "description": "test description A"}' -H 'Content-Type: application/json' http://localhost:8080/v1/news/create
 
 # PATCH
-curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH http://localhost:8080/v1/news/testA
+curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH http://localhost:8080/v1/news/update/test-a
 
 # DELETE
-curl -s -X DELETE http://localhost:8080/v1/news/testA
-curl -s -X DELETE http://localhost:8080/v1/news/
+curl -s -X DELETE http://localhost:8080/v1/news/delete/test-a
+curl -s -X DELETE http://localhost:8080/v1/news/delete
 ```
 
 ## 🪝 Tags
