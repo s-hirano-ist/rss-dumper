@@ -76,6 +76,84 @@ describe("userController test", () => {
       });
     });
   });
+  describe("POST /v1/news-detail/create", () => {
+    test("response with success (with quote)", async () => {
+      const body = {
+        ...testData.withNewsDetail.newsDetail.create[0],
+      } as Record<string, string>;
+      const originalBody = { ...body };
+      body.heading = "sample-heading";
+      body.description = "sample description";
+
+      const response = await supertest(app)
+        .post("/v1/news-detail/create")
+        .send(body);
+      expect(response.status).toBe(201);
+      expect(response.body).toEqual(originalBody);
+
+      const newsDetail = await prisma.newsDetail.findMany({
+        select: { title: true, url: true, quote: true },
+      });
+      expect(newsDetail.length).toBe(1);
+      expect(newsDetail[0]).toStrictEqual(originalBody);
+    });
+    test("response with success (no quote)", async () => {
+      const d = testData.noNewsDetail;
+      await prisma.news.create({ data: d });
+      const body = {
+        ...testData.withNewsDetail.newsDetail.create[1],
+      } as Record<string, string>;
+      const originalBody = { ...body };
+      body.heading = "sample-heading";
+      body.description = "sample description";
+
+      const response = await supertest(app)
+        .post("/v1/news-detail/create")
+        .send(body);
+      expect(response.status).toBe(201);
+
+      const newsDetail = await prisma.newsDetail.findMany({
+        select: { title: true, url: true, quote: false },
+      });
+      expect(newsDetail.length).toBe(1);
+      expect(newsDetail[0]).toStrictEqual(originalBody);
+    });
+    // no duplicate key
+    test("ERROR: missing key", async () => {
+      const d = testData.noNewsDetail;
+      await prisma.news.create({ data: d });
+      const missingKeyBody = { url: "https://google.com" };
+      const response = await supertest(app)
+        .post("/v1/news-detail/create")
+        .send(missingKeyBody);
+
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message:
+          'ERROR: "heading" is required. "description" is required. "title" is required',
+      });
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(0);
+    });
+    test("ERROR: invalid key", async () => {
+      const d = testData.noNewsDetail;
+      await prisma.news.create({ data: d });
+      const invalidKeyBody = {
+        url: "https://google.com",
+        invalidKey: "invalid",
+      };
+      const response = await supertest(app)
+        .post("/v1/news-detail/create")
+        .send(invalidKeyBody);
+      expect(response.status).toBe(422);
+      expect(response.body).toEqual({
+        message:
+          'ERROR: "heading" is required. "description" is required. "title" is required. "invalidKey" is not allowed',
+      });
+      const newsDetail = await prisma.newsDetail.findMany();
+      expect(newsDetail.length).toBe(0);
+    });
+  });
   describe("POST /v1/news-detail/create/:heading", () => {
     test("response with success (with quote)", async () => {
       const d = testData.noNewsDetail;

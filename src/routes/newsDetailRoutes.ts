@@ -14,8 +14,8 @@ const router = Router();
 router.get("/", getAllNewsDetail);
 router.get("/:id", getNewsDetailById);
 
-router.post("/create/:heading", createNewsDetailByNewsHeading);
 router.post("/create", createNewsAndNewsDetail);
+router.post("/create/:heading", createNewsDetailByNewsHeading);
 
 // router.patch("/update/:id", updateNewsDetailById);
 

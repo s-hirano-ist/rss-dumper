@@ -56,41 +56,6 @@ export const getNewsDetailById = async (
   }
 };
 
-export const createNewsDetailByNewsHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  try {
-    const validatedValue = await newsDetailPostSchema.validateAsync(
-      request.body,
-      { abortEarly: false },
-    );
-    const title = sanitizeHtml(validatedValue.title as string);
-    const url = sanitizeHtml(validatedValue.url as string);
-    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
-
-    const news = await prisma.news.findUniqueOrThrow({
-      where: { heading: request.params.heading },
-      select: { id: true },
-    });
-
-    const newsDetail = await prisma.newsDetail.create({
-      data: { title, url, quote, newsId: news.id },
-      select: { title: true, url: true, quote: true },
-    });
-    response.status(201).json(newsDetail);
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      validationError(response, error.message);
-    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      /* istanbul ignore next */
-      unknownError(response, error);
-    }
-  }
-};
-
 export const createNewsAndNewsDetail = async (
   request: Request,
   response: Response,
@@ -111,6 +76,39 @@ export const createNewsAndNewsDetail = async (
       data: { heading, description },
       select: { id: true },
     });
+    const newsDetail = await prisma.newsDetail.create({
+      data: { title, url, quote, newsId: news.id },
+      select: { title: true, url: true, quote: true },
+    });
+    response.status(201).json(newsDetail);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      validationError(response, error.message);
+    } else {
+      /* istanbul ignore next */
+      unknownError(response, error);
+    }
+  }
+};
+
+export const createNewsDetailByNewsHeading = async (
+  request: Request,
+  response: Response,
+) => {
+  try {
+    const validatedValue = await newsDetailPostSchema.validateAsync(
+      request.body,
+      { abortEarly: false },
+    );
+    const title = sanitizeHtml(validatedValue.title as string);
+    const url = sanitizeHtml(validatedValue.url as string);
+    const quote = validatedValue.quote as string; // FIXME: need sanitizing in frontend due to inline HTML
+
+    const news = await prisma.news.findUniqueOrThrow({
+      where: { heading: request.params.heading },
+      select: { id: true },
+    });
+
     const newsDetail = await prisma.newsDetail.create({
       data: { title, url, quote, newsId: news.id },
       select: { title: true, url: true, quote: true },
