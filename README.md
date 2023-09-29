@@ -17,7 +17,9 @@
 Add following environments
 
 ```env
-DATABASE_URL=
+# DATABASE_URL=
+POSTGRES_PRISMA_URL=
+POSTGRES_URL_NON_POOLING=
 NODE_VERSION=18.17.1
 PORT=8080
 ```
@@ -165,3 +167,7 @@ Override
 ```bash
 psql -h 127.0.0.1 -U sola rss-db -f ./seed.sql
 ```
+
+Pooling by PgBouncer
+
+> https://tech.hello.ai/entry/2023/02/13/131644
