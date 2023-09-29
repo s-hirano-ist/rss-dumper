@@ -6,8 +6,7 @@ import "dotenv/config";
 
 const app = express();
 
-const IP_ADDRESS = process.env.IP_ADDRESS;
-const PORT = process.env.PORT;
+const PORT = process.env.PORT ?? 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,9 +16,9 @@ app.use("/v1/news-detail", newsDetailRoutes);
 app.use("/health", healthRoutes);
 
 const server = app.listen(PORT, () => {
-  if (process.env.NODE_ENV !== "test")
+  if (process.env.NODE_ENV === "development")
     /* istanbul ignore next */
-    console.log(`REST API express server ready at: ${IP_ADDRESS}:${PORT}`);
+    console.log(`REST API express server ready at: http://localhost:${PORT}`);
 });
 
 export { app, server };
