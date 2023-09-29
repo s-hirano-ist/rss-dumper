@@ -62,15 +62,13 @@ No sanitization to prevent SQL injection is needed due to Prisma's prevention.
 
 ## References
 
+### Express
+
 Express, Prisma, REST API
 
 > https://zenn.dev/yamo/articles/prisma-express-rest-api
 
-ディレクトリ構成
-
-> https://medium.com/codechef-vit/a-better-project-structure-with-express-and-node-js-c23abc2d736f
-
-ExpressにTypeScript導入
+Introduce TypeScript in Express
 
 > https://reffect.co.jp/node-js/express-typescript/
 
@@ -82,25 +80,9 @@ Express validator
 >
 > https://blog.capilano-fw.com/?p=5619
 
-### TypeScript
-
-TypeScript導入
-
-```bash
-tsc --init
-```
-
-Run any file
-
-```bash
-yarn ts-node src/xxx.ts
-```
-
-### Express
-
 ### Prisma
 
-Prisma導入
+Introductions
 
 ```bash
 npx prisma init
@@ -112,10 +94,50 @@ Edit database with GUI
 yarn prisma:studio
 ```
 
+Merits
+
+> https://qiita.com/am_765/items/5e42bd5f87b296f61fbc
+
+Introductions and tutorials
+
+> https://zenn.dev/smish0000/articles/f1a6f463417b65
+>
+> https://reffect.co.jp/node-js/prisma-basic/
+
+samples
+
+> https://github.com/prisma/prisma-examples/
+
+### Refactoring
+
+Directory structure
+
+> https://medium.com/codechef-vit/a-better-project-structure-with-express-and-node-js-c23abc2d736f
+
+### TypeScript
+
+Introduce TypeScript
+
+```bash
+tsc --init
+```
+
+Run any file
+
+```bash
+yarn ts-node src/xxx.ts
+```
+
 ### PostgreSQL
 
 Connect to PostgreSQL
 
 ```bash
 psql -h 127.0.0.1 -U sola -p 5555 rss-db
+```
+
+Override
+
+```bash
+psql -h 127.0.0.1 -U sola rss-db -f ./seed.sql
 ```
