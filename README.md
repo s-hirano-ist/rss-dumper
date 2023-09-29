@@ -12,6 +12,30 @@
 **Linting** - [ESLint](https://eslint.org)  
 **Validation** - [Joi](https://joi.dev/)
 
+## Render settings
+
+Add following environments
+
+```env
+DATABASE_URL=
+NODE_VERSION=18.17.1
+PORT=8080
+```
+
+> https://render.com/docs/node-version
+
+Build command
+
+```bash
+yarn
+```
+
+Start command
+
+```bash
+NODE_ENV=production yarn start
+```
+
 ## 🍾 Initial setups
 
 ```bash
