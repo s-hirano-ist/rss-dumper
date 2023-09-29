@@ -16,7 +16,7 @@ app.use("/v1/news-detail", newsDetailRoutes);
 app.use("/health", healthRoutes);
 
 const server = app.listen(PORT, () => {
-  if (process.env.NODE_ENV === "development")
+  if (process.env.NODE_ENV !== "test")
     /* istanbul ignore next */
     console.log(`REST API express server ready at: http://localhost:${PORT}`);
 });

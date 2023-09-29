@@ -156,18 +156,6 @@ yarn ts-node src/xxx.ts
 
 ### PostgreSQL
 
-Connect to PostgreSQL
-
-```bash
-psql -h 127.0.0.1 -U sola -p 5555 rss-db
-```
-
-Override
-
-```bash
-psql -h 127.0.0.1 -U sola rss-db -f ./seed.sql
-```
-
 Pooling by PgBouncer
 
 > https://tech.hello.ai/entry/2023/02/13/131644
