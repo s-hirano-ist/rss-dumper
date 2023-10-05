@@ -25,7 +25,7 @@ describe("userController test", () => {
         }),
       );
       const news = await prisma.news.findMany({
-        select: { heading: true, description: true },
+        select: { id: true, heading: true, description: true },
       });
 
       const response = await supertest(app).get("/v1/news");
