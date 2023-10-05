@@ -57,18 +57,18 @@ yarn test
 
 ```bash
 # GET
-curl -s http://localhost:8080/v1/news/
-curl -s http://localhost:8080/v1/news/test-a
+curl -s https://rss-dumper.onrender.com/v1/news/
+curl -s https://rss-dumper.onrender.com/v1/news/test-a
 
 # POST
-curl -s -d '{"heading": "test-a", "description": "test description A"}' -H 'Content-Type: application/json' http://localhost:8080/v1/news/create
+curl -s -d '{"heading": "test-a", "description": "test description A"}' -H 'Content-Type: application/json' https://rss-dumper.onrender.com/v1/news/create
 
 # PATCH
-curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH http://localhost:8080/v1/news/update/test-a
+curl -s -d '{"description": "updated description"}' -H 'Content-Type: application/json' -X PATCH https://rss-dumper.onrender.com/v1/news/update/test-a
 
 # DELETE
-curl -s -X DELETE http://localhost:8080/v1/news/delete/test-a
-curl -s -X DELETE http://localhost:8080/v1/news/delete
+curl -s -X DELETE https://rss-dumper.onrender.com/v1/news/delete/test-a
+curl -s -X DELETE https://rss-dumper.onrender.com/v1/news/delete
 ```
 
 ## 🪝 Tags
