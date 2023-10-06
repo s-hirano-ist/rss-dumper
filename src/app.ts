@@ -11,7 +11,7 @@ const PORT = process.env.PORT ?? 8080;
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // TODO: add production url
+    origin: ["https://private.s-hirano.com", "http://localhost:3000"],
     credentials: true,
     optionsSuccessStatus: 200,
   }),
