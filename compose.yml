@@ -3,7 +3,8 @@ version: "3.8"
 services:
   db:
     container_name: rss-db
-    image: postgres:15-alpine
+    build:
+      context: .
     volumes:
       - rss-db-data:/var/lib/postgresql/data
     ports:
@@ -12,6 +13,7 @@ services:
       POSTGRES_USER: ${USERNAME}
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: rss-db
+    restart: always
 
 volumes:
   rss-db-data:
