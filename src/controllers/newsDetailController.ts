@@ -15,7 +15,7 @@ const prisma = new PrismaClient();
 export const getAllNewsDetail = async (_: Request, response: Response) => {
   try {
     const allNewsDetail = await prisma.newsDetail.findMany({
-      select: { title: true, url: true },
+      select: { id: true, newsId: true, title: true, url: true },
     });
     response.status(200).json(allNewsDetail);
   } catch (error) {
