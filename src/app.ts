@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import healthRoutes from "./routes/healthRoutes";
 import newsDetailRoutes from "./routes/newsDetailRoutes";
@@ -8,6 +9,13 @@ const app = express();
 
 const PORT = process.env.PORT ?? 8080;
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // TODO: add production url
+    credentials: true,
+    optionsSuccessStatus: 200,
+  }),
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
