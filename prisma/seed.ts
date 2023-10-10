@@ -1,45 +1,59 @@
 import { PrismaClient } from "@prisma/client";
+import data1 from "./sampleData/AI.json";
+import data2 from "./sampleData/education.json";
+import data3 from "./sampleData/innovation.json";
+import data4 from "./sampleData/interesting.json";
+
 const prisma = new PrismaClient();
 
-// TODO: insert more clean data
 async function main() {
   try {
-    const sampleData1 = await prisma.news.create({
-      // UPSERT: if already exists then update, otherwise create
-      data: {
-        heading: "A",
-        description: "sample A",
+    // UPSERT: if already exists then update, otherwise create
+    await prisma.news.upsert({
+      where: { id: 1 },
+      update: {},
+      create: {
+        heading: data1.heading,
+        description: data1.description,
         newsDetail: {
-          create: [{ title: "sample detail A", url: "https://google.com" }],
+          create: data1.body,
         },
       },
     });
-
-    const sampleData2 = await prisma.news.upsert({
+    await prisma.news.upsert({
       where: { id: 2 },
       update: {},
       create: {
-        heading: "B",
-        description: "sample B",
+        heading: data2.heading,
+        description: data2.description,
         newsDetail: {
-          create: [{ title: "sample detail B", url: "https://google.com" }],
+          create: data2.body,
         },
       },
     });
-
-    const sampleData3 = await prisma.news.upsert({
+    await prisma.news.upsert({
       where: { id: 3 },
       update: {},
       create: {
-        heading: "C",
-        description: "sample C",
+        heading: data3.heading,
+        description: data3.description,
         newsDetail: {
-          create: [{ title: "sample detail C", url: "https://google.com" }],
+          create: data3.body,
         },
       },
     });
-
-    console.log({ sampleData1, sampleData2, sampleData3 });
+    await prisma.news.upsert({
+      where: { id: 4 },
+      update: {},
+      create: {
+        heading: data4.heading,
+        description: data4.description,
+        newsDetail: {
+          create: data4.body,
+        },
+      },
+    });
+    console.log("added sample data to the database");
   } catch (e) {
     console.error(e);
     process.exit(1);
