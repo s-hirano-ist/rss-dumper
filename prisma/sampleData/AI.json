@@ -1,0 +1,45 @@
+{
+  "heading": "artificial-intelligence",
+  "description": "AIについて",
+  "body": [
+    {
+      "title": "曲作り with ChatGPT",
+      "url": "https://www.techno-edge.net/article/2023/01/30/779.html"
+    },
+    {
+      "title": "3 次元 Stable Diffusion",
+      "url": "https://togetter.com/li/2207314"
+    },
+    {
+      "title": "Stable Diffusionでのポーズ",
+      "url": "https://blogcake.net/controlnet/"
+    },
+    {
+      "title": "誤差逆伝播法の問題点と組織課題の問題点の類似",
+      "quote": "深層学習によって解消された誤差逆伝播法の問題点とのアナロジーから、組織課題に対する改善策を提案してください。",
+      "url": "https://note.com/amachino/n/n956f804a37a9"
+    },
+    {
+      "title": "AIに生成できないもの",
+      "quote": "AIは「決定的な意外性」を演出することができるか",
+      "url": "https://somethingorange.jp/entry/ainoyume"
+    },
+    {
+      "title": "GPT-4にfrontendは奪われるか",
+      "url": "https://www.joshwcomeau.com/blog/the-end-of-frontend-development/"
+    },
+    {
+      "title": "AI生成コードは脆弱性の巣窟になりがち",
+      "quote": "チュートリアルのコードは脆弱性満載",
+      "url": "https://xtech.nikkei.com/atcl/nxt/column/18/00682/012500111/"
+    },
+    {
+      "title": "人間とAIの違いは、AIは80点を量産できる。100点にできるのは人間だけ",
+      "url": "https://bunshun.jp/articles/-/62698"
+    },
+    {
+      "title": "解釈可能性",
+      "url": "https://hacarus.github.io/interpretable-ml-book-ja/index.html"
+    }
+  ]
+}
