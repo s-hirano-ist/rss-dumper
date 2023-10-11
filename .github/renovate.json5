@@ -4,8 +4,8 @@
   extends: ["config:base", ":semanticCommitTypeAll(chore)"],
   enabledManagers: ["npm"],
   dependencyDashboard: true,
-  schedule: ["before 11am every weekday"],
-  automergeSchedule: ["before 11am every weekday"],
+  schedule: ["before 11am every monday"],
+  automergeSchedule: ["before 11am every tuesday"],
   labels: ["dependencies"],
   rangeStrategy: "bump",
   lockFileMaintenance: {
