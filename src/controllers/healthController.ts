@@ -1,6 +1,10 @@
-import { Request, Response } from "express";
+import { Controller, Get, Route } from "tsoa";
+import { healthService } from "../services/healthService";
 
-export const healthController = (_: Request, response: Response) => {
-  response.status(200).json("Backend is healthy");
-  return;
-};
+@Route("health")
+export class HealthController extends Controller {
+  @Get()
+  public async getHealth(): Promise<string> {
+    return healthService();
+  }
+}
