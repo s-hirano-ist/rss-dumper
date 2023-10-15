@@ -2,58 +2,35 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { Request, Response } from "express";
 import { ValidationError } from "joi";
 import sanitizeHtml from "sanitize-html";
+import { Controller, Get, Route, Path } from "tsoa";
+import {
+  allNewsService,
+  newsByHeadingService,
+  newsAndNewsDetailByHeadingService,
+} from "../services/newsService";
 import { prismaError, unknownError, validationError } from "../utils/error";
 import { sendInfoResponse } from "../utils/response";
 import { newsPostSchema, newsPatchSchema } from "../utils/schema";
 
 const prisma = new PrismaClient();
 
-export const getAllNews = async (_: Request, response: Response) => {
-  try {
-    const allNews = await prisma.news.findMany({
-      select: { id: true, heading: true, description: true },
-    });
-    response.status(200).json(allNews);
-  } catch (error) {
-    /* istanbul ignore next */
-    unknownError(response, error);
+@Route("v1/news")
+export class NewsController extends Controller {
+  @Get("all")
+  public async getAllNews() {
+    return allNewsService();
   }
-};
 
-export const getNewsByHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  await getNews(request, response, false);
-};
-
-export const getNewsAndNewsDetailByHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  await getNews(request, response, true);
-};
-
-const getNews = async (
-  request: Request,
-  response: Response,
-  showNewsDetail: boolean,
-) => {
-  try {
-    const news = await prisma.news.findUniqueOrThrow({
-      where: { heading: request.params.heading },
-      select: { heading: true, description: true, newsDetail: showNewsDetail },
-    });
-    response.status(200).json(news);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      /* istanbul ignore next */
-      unknownError(response, error);
-    }
+  @Get(":heading")
+  public async getNewsByHeading(@Path() heading: string) {
+    return newsByHeadingService(heading);
   }
-};
+
+  @Get(":heading/all")
+  public async getNewsAndNewsDetailByHeading(@Path() heading: string) {
+    return newsAndNewsDetailByHeadingService(heading);
+  }
+}
 
 export const createNews = async (request: Request, response: Response) => {
   try {

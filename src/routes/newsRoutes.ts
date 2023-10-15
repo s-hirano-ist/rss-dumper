@@ -1,8 +1,5 @@
 import { Router } from "express";
 import {
-  getAllNews,
-  getNewsByHeading,
-  getNewsAndNewsDetailByHeading,
   createNews,
   updateNewsByHeading,
   deleteAllNews,
@@ -10,10 +7,6 @@ import {
 } from "../controllers/newsController";
 
 const router = Router();
-
-router.get("/", getAllNews);
-router.get("/:heading", getNewsByHeading);
-router.get("/:heading/all", getNewsAndNewsDetailByHeading);
 
 router.post("/create", createNews);
 
