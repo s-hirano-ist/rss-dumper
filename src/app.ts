@@ -1,8 +1,9 @@
 import cors from "cors";
 import express from "express";
-import healthRoutes from "./routes/healthRoutes";
+import swaggerUi from "swagger-ui-express";
+import { RegisterRoutes } from "../build/routes";
+import swaggerDocument from "../build/swagger.json";
 import newsDetailRoutes from "./routes/newsDetailRoutes";
-import newsRoutes from "./routes/newsRoutes";
 import "dotenv/config";
 
 const app = express();
@@ -19,9 +20,11 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/v1/news", newsRoutes);
+// this route file is not included in Swagger UI
 app.use("/v1/news-detail", newsDetailRoutes);
-app.use("/health", healthRoutes);
+
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+RegisterRoutes(app);
 
 const server = app.listen(PORT, () => {
   if (process.env.NODE_ENV !== "test")

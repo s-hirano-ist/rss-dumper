@@ -19,5 +19,5 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "cSpell.enabled": true,
   "cSpell.allowCompoundWords": true,
-  "cSpell.words": ["alphanum", "fkey", "pkey", "psql", "tsbuildinfo"]
+  "cSpell.words": ["alphanum", "fkey", "pkey", "psql", "tsbuildinfo", "tsoa"]
 }

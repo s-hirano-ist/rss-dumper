@@ -1,0 +1,454 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "rss-dumper",
+		"version": "0.0.1",
+		"description": "RSS Dumper Project.",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "string"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/v1/news": {
+			"get": {
+				"operationId": "GetAllNews",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"items": {
+												"properties": {
+													"description": {
+														"type": "string"
+													},
+													"heading": {
+														"type": "string"
+													},
+													"id": {
+														"type": "number",
+														"format": "double"
+													}
+												},
+												"required": [
+													"description",
+													"heading",
+													"id"
+												],
+												"type": "object"
+											},
+											"type": "array"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/v1/news/{heading}": {
+			"get": {
+				"operationId": "GetNewsByHeading",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"newsDetail": {
+													"items": {
+														"properties": {
+															"newsId": {
+																"type": "number",
+																"format": "double"
+															},
+															"favorite": {
+																"type": "boolean"
+															},
+															"published": {
+																"type": "boolean"
+															},
+															"quote": {
+																"type": "string"
+															},
+															"url": {
+																"type": "string"
+															},
+															"title": {
+																"type": "string"
+															},
+															"id": {
+																"type": "number",
+																"format": "double"
+															}
+														},
+														"required": [
+															"newsId",
+															"favorite",
+															"published",
+															"quote",
+															"url",
+															"title",
+															"id"
+														],
+														"type": "object"
+													},
+													"type": "array"
+												},
+												"description": {
+													"type": "string"
+												},
+												"heading": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"newsDetail",
+												"description",
+												"heading"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/v1/news/{heading}/all": {
+			"get": {
+				"operationId": "GetNewsAndNewsDetailByHeading",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"newsDetail": {
+													"items": {
+														"properties": {
+															"newsId": {
+																"type": "number",
+																"format": "double"
+															},
+															"favorite": {
+																"type": "boolean"
+															},
+															"published": {
+																"type": "boolean"
+															},
+															"quote": {
+																"type": "string"
+															},
+															"url": {
+																"type": "string"
+															},
+															"title": {
+																"type": "string"
+															},
+															"id": {
+																"type": "number",
+																"format": "double"
+															}
+														},
+														"required": [
+															"newsId",
+															"favorite",
+															"published",
+															"quote",
+															"url",
+															"title",
+															"id"
+														],
+														"type": "object"
+													},
+													"type": "array"
+												},
+												"description": {
+													"type": "string"
+												},
+												"heading": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"newsDetail",
+												"description",
+												"heading"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/v1/news/create": {
+			"post": {
+				"operationId": "CreateNews",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										},
+										{
+											"properties": {
+												"description": {
+													"type": "string"
+												},
+												"heading": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"description",
+												"heading"
+											],
+											"type": "object"
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
+		"/v1/news/update/{heading}": {
+			"patch": {
+				"operationId": "UpdateNewsByHeading",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
+		"/v1/news/delete": {
+			"delete": {
+				"operationId": "DeleteAllNews",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/v1/news/delete/{heading}": {
+			"delete": {
+				"operationId": "DeleteNewsByHeading",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

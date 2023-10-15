@@ -1,138 +1,65 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
-import { ValidationError } from "joi";
-import sanitizeHtml from "sanitize-html";
-import { prismaError, unknownError, validationError } from "../utils/error";
-import { sendInfoResponse } from "../utils/response";
-import { newsPostSchema, newsPatchSchema } from "../utils/schema";
+import {
+  Controller,
+  Get,
+  Route,
+  Path,
+  Post,
+  Patch,
+  Body,
+  SuccessResponse,
+  Delete,
+} from "tsoa";
+import {
+  getAllNewsService,
+  getNewsByHeadingService,
+  getNewsAndNewsDetailByHeadingService,
+  createNewsService,
+  updateNewsByHeadingService,
+  deleteAllNewsService,
+  deleteNewsByHeadingService,
+} from "../services/newsService";
 
-const prisma = new PrismaClient();
-
-export const getAllNews = async (_: Request, response: Response) => {
-  try {
-    const allNews = await prisma.news.findMany({
-      select: { id: true, heading: true, description: true },
-    });
-    response.status(200).json(allNews);
-  } catch (error) {
-    /* istanbul ignore next */
-    unknownError(response, error);
+@Route("v1/news")
+export class NewsController extends Controller {
+  @Get()
+  public async getAllNews() {
+    return getAllNewsService(this);
   }
-};
 
-export const getNewsByHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  await getNews(request, response, false);
-};
-
-export const getNewsAndNewsDetailByHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  await getNews(request, response, true);
-};
-
-const getNews = async (
-  request: Request,
-  response: Response,
-  showNewsDetail: boolean,
-) => {
-  try {
-    const news = await prisma.news.findUniqueOrThrow({
-      where: { heading: request.params.heading },
-      select: { heading: true, description: true, newsDetail: showNewsDetail },
-    });
-    response.status(200).json(news);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      /* istanbul ignore next */
-      unknownError(response, error);
-    }
+  @Get("{heading}")
+  public async getNewsByHeading(@Path() heading: string) {
+    return getNewsByHeadingService(heading, this);
   }
-};
-
-export const createNews = async (request: Request, response: Response) => {
-  try {
-    const validatedValue = await newsPostSchema.validateAsync(request.body, {
-      abortEarly: false,
-    });
-    const heading = sanitizeHtml(validatedValue.heading as string);
-    const description = sanitizeHtml(validatedValue.description as string);
-
-    const data = await prisma.news.create({
-      data: { heading, description },
-      select: { heading: true, description: true },
-    });
-    response.status(201).json(data);
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      validationError(response, error.message);
-    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      /* istanbul ignore next */
-      unknownError(response, error);
-    }
+  @Get("{heading}/all")
+  public async getNewsAndNewsDetailByHeading(@Path() heading: string) {
+    return getNewsAndNewsDetailByHeadingService(heading, this);
   }
-};
 
-export const updateNewsByHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  try {
-    const validatedValue = await newsPatchSchema.validateAsync(request.body, {
-      abortEarly: false,
-    });
-    const description = sanitizeHtml(validatedValue.description as string);
-    const heading = request.params.heading;
-    await prisma.news.update({
-      where: { heading },
-      data: { description },
-    });
-    sendInfoResponse(response, 200, `Updated ${heading}`);
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      validationError(response, error.message);
-    } else if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      /* istanbul ignore next */
-      unknownError(response, error);
-    }
+  @SuccessResponse("201", "Created")
+  @Post("create")
+  public async createNews(@Body() requestBody: any) {
+    // TODO: may be better to validate here
+    return createNewsService(requestBody, this);
   }
-};
 
-export const deleteAllNews = async (_: Request, response: Response) => {
-  try {
-    await prisma.news.deleteMany();
-    sendInfoResponse(response, 200, "Deleted all");
-  } catch (error) {
-    /* istanbul ignore next */
-    unknownError(response, error);
+  @SuccessResponse("200", "Updated")
+  @Patch("update/{heading}")
+  public async updateNewsByHeading(
+    @Path() heading: string,
+    @Body() requestBody: any,
+  ) {
+    return updateNewsByHeadingService(heading, requestBody, this);
   }
-};
 
-export const deleteNewsByHeading = async (
-  request: Request,
-  response: Response,
-) => {
-  try {
-    const heading = request.params.heading;
-    await prisma.news.delete({
-      where: { heading },
-    });
-    sendInfoResponse(response, 200, `Deleted ${heading}`);
-  } catch (error) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      prismaError(response, error);
-    } else {
-      /* istanbul ignore next */
-      unknownError(response, error);
-    }
+  @SuccessResponse("200", "Deleted")
+  @Delete("delete")
+  public async deleteAllNews() {
+    return deleteAllNewsService(this);
   }
-};
+
+  @SuccessResponse("200", "Deleted")
+  @Delete("delete/{heading}")
+  public async deleteNewsByHeading(@Path() heading: string) {
+    return deleteNewsByHeadingService(heading, this);
+  }
+}

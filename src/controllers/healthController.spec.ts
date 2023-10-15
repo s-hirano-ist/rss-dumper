@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import { app, server } from "../app";
 
-describe("userController test", () => {
+describe("healthController test", () => {
   afterAll(() => {
     server.close();
   });
