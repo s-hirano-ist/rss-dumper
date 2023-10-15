@@ -16,7 +16,9 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:dev": "run-s -l prisma:generate prisma:migrate prisma:seed",
     "prisma:studio": "prisma studio",
-    "test": "NODE_ENV=test jest --runInBand --collect-coverage"
+    "test": "NODE_ENV=test jest --runInBand --collect-coverage",
+    "tsoa:swagger": "tsoa spec",
+    "tsoa:route": "tsoa routes"
   },
   "author": "",
   "license": "ISC",

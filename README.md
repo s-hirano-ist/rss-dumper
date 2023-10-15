@@ -41,9 +41,11 @@ NODE_ENV=production yarn start
 ## 🍾 Initial setups
 
 ```bash
-git clone https://github.com/s-hirano-ist/blog.git
+git clone https://github.com/s-hirano-ist/rss-dumper.git
 yarn
 yarn prisma:dev
+yarn tsoa:swagger
+yarn tsoa:routes
 docker compose up --build -d
 ```
 
