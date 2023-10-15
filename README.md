@@ -162,3 +162,7 @@ yarn ts-node src/xxx.ts
 Pooling by PgBouncer
 
 > https://tech.hello.ai/entry/2023/02/13/131644
+
+### Auto generate Swagger API
+
+> https://zenn.dev/briete/articles/e556424c18e68d
