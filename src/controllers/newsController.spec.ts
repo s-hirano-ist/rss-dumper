@@ -6,7 +6,7 @@ import resetDatabase from "../utils/resetDatabase";
 
 const prisma = new PrismaClient();
 
-describe("userController test", () => {
+describe("newsController test", () => {
   beforeEach(async () => {
     await resetDatabase();
   });
