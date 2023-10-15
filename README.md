@@ -173,3 +173,7 @@ Pooling by PgBouncer
 ### Auto generate Swagger API
 
 > https://zenn.dev/briete/articles/e556424c18e68d
+
+### Response status
+
+> https://qiita.com/unsoluble_sugar/items/b080a16701946fcfce70
