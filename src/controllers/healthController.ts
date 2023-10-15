@@ -4,7 +4,7 @@ import { healthService } from "../services/healthService";
 @Route("health")
 export class HealthController extends Controller {
   @Get()
-  public async getHealth(): Promise<string> {
+  public getHealth() {
     return healthService();
   }
 }
