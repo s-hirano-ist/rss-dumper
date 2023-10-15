@@ -1,30 +1,39 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-// import { prismaError, unknownError } from "../utils/error";
+import { NewsController } from "../controllers/newsController";
+import { prismaError2, unknownError2 } from "../utils/error";
 
 const prisma = new PrismaClient();
 
-export const allNewsService = async () => {
+export const allNewsService = async (controller: NewsController) => {
   try {
     return await prisma.news.findMany({
       select: { id: true, heading: true, description: true },
     });
   } catch (error) {
-    /* istanbul ignore next */ //TODO:
-    // unknownError(response, error);
-    console.log("error", error);
-    return [];
+    /* istanbul ignore next */
+    return unknownError2(controller, error);
   }
 };
 
-export const newsByHeadingService = async (heading: string) => {
-  return await getNews(heading, false);
+export const newsByHeadingService = async (
+  heading: string,
+  controller: NewsController,
+) => {
+  return await getNews(heading, false, controller);
 };
 
-export const newsAndNewsDetailByHeadingService = async (heading: string) => {
-  return await getNews(heading, true);
+export const newsAndNewsDetailByHeadingService = async (
+  heading: string,
+  controller: NewsController,
+) => {
+  return await getNews(heading, true, controller);
 };
 
-const getNews = async (heading: string, showNewsDetail: boolean) => {
+const getNews = async (
+  heading: string,
+  showNewsDetail: boolean,
+  controller: NewsController,
+) => {
   try {
     return await prisma.news.findUniqueOrThrow({
       where: { heading },
@@ -32,13 +41,10 @@ const getNews = async (heading: string, showNewsDetail: boolean) => {
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // TODO:
-      //   prismaError(response, error);
+      return prismaError2(controller, error);
     } else {
-      // TODO:
       /* istanbul ignore next */
-      //   unknownError(response, error);
+      return unknownError2(controller, error);
     }
-    return [];
   }
 };

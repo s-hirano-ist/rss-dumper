@@ -16,19 +16,19 @@ const prisma = new PrismaClient();
 
 @Route("v1/news")
 export class NewsController extends Controller {
-  @Get("all")
+  @Get("")
   public async getAllNews() {
-    return allNewsService();
+    return allNewsService(this);
   }
 
   @Get(":heading")
   public async getNewsByHeading(@Path() heading: string) {
-    return newsByHeadingService(heading);
+    return newsByHeadingService(heading, this);
   }
 
   @Get(":heading/all")
   public async getNewsAndNewsDetailByHeading(@Path() heading: string) {
-    return newsAndNewsDetailByHeadingService(heading);
+    return newsAndNewsDetailByHeadingService(heading, this);
   }
 }
 

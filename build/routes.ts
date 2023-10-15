@@ -62,7 +62,7 @@ export function RegisterRoutes(app: Router) {
             }
         });
         // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-        app.get('/v1/news/all',
+        app.get('/v1/news',
             ...(fetchMiddlewares<RequestHandler>(NewsController)),
             ...(fetchMiddlewares<RequestHandler>(NewsController.prototype.getAllNews)),
 
@@ -117,6 +117,7 @@ export function RegisterRoutes(app: Router) {
 
             function NewsController_getNewsAndNewsDetailByHeading(request: any, response: any, next: any) {
             const args = {
+                    heading: {"in":"path","name":"heading","required":true,"dataType":"string"},
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
