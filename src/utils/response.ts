@@ -9,7 +9,7 @@ export function sendInfoResponse2(
   consoleOnlyError: unknown = undefined,
 ) {
   if (status === 200 || status === 201) {
-    controller.setStatus(200); // TODO: change to status
+    controller.setStatus(status);
     return { message: message };
   } else {
     controller.setStatus(status);
@@ -29,7 +29,7 @@ export function sendInfoResponse(
   consoleOnlyError: unknown = undefined,
 ) {
   if (status === 200 || status === 201) {
-    response.status(200).json({
+    response.status(status).json({
       message: message,
     });
   } else {

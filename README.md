@@ -50,6 +50,13 @@ yarn tsoa:routes
 docker compose up --build -d
 ```
 
+## API path
+
+- `/api/docs`: Swagger UI
+- `/health`: health
+- `/v1/news`: Pure REST API
+- `/v1/news-detail`: REST API with Swagger auto generation with Tsoa
+
 ## Tests
 
 ```bash
@@ -162,3 +169,7 @@ yarn ts-node src/xxx.ts
 Pooling by PgBouncer
 
 > https://tech.hello.ai/entry/2023/02/13/131644
+
+### Auto generate Swagger API
+
+> https://zenn.dev/briete/articles/e556424c18e68d
