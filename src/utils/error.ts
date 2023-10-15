@@ -30,10 +30,12 @@ export function prismaError(
   error: Prisma.PrismaClientKnownRequestError,
 ) {
   switch (error.code) {
+    /* not used due to moving to prismaError2
     case "P2002":
       // "Unique constraint failed on the {constraint}"
       sendInfoResponse(response, 400, "Duplicate Entry");
       break;
+    */
     case "P2025":
       // "An operation failed because it depends on one or more records that were required but not found. {cause}"
       sendInfoResponse(response, 404, "Not found");
