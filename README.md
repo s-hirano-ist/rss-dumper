@@ -6,11 +6,12 @@
 **Main Framework** - [Express](https://expressjs.com/)  
 **ORM** - [Prisma](https://www.prisma.io/)  
 **Database** - [PostgreSQL](https://www.postgresql.org/)  
-**test** - [Jest](https://jestjs.io/)  
+**Test** - [Jest](https://jestjs.io/)  
 **Authentication** - [Passport](http://www.passportjs.org/)  
 **Code Formatting** - [Prettier](https://prettier.io/)  
 **Linting** - [ESLint](https://eslint.org)  
-**Validation** - [Joi](https://joi.dev/)
+**Validation** - [Joi](https://joi.dev/)  
+**Generate Swagger** - [Tsoa](https://tsoa-community.github.io/docs/)
 
 ## Render settings
 
