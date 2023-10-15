@@ -109,7 +109,6 @@
 							"application/json": {
 								"schema": {
 									"anyOf": [
-										{},
 										{
 											"items": {
 												"properties": {
@@ -132,6 +131,17 @@
 												"type": "object"
 											},
 											"type": "array"
+										},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
 										}
 									]
 								}
@@ -153,7 +163,17 @@
 							"application/json": {
 								"schema": {
 									"anyOf": [
-										{},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										},
 										{
 											"properties": {
 												"newsDetail": {
@@ -207,17 +227,6 @@
 												"newsDetail",
 												"description",
 												"heading"
-											],
-											"type": "object"
-										},
-										{
-											"properties": {
-												"message": {
-													"type": "string"
-												}
-											},
-											"required": [
-												"message"
 											],
 											"type": "object"
 										}
@@ -250,7 +259,17 @@
 							"application/json": {
 								"schema": {
 									"anyOf": [
-										{},
+										{
+											"properties": {
+												"message": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"message"
+											],
+											"type": "object"
+										},
 										{
 											"properties": {
 												"newsDetail": {
@@ -306,7 +325,36 @@
 												"heading"
 											],
 											"type": "object"
-										},
+										}
+									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/v1/news/create": {
+			"post": {
+				"operationId": "CreateNews",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"anyOf": [
 										{
 											"properties": {
 												"message": {
@@ -317,8 +365,129 @@
 												"message"
 											],
 											"type": "object"
+										},
+										{
+											"properties": {
+												"description": {
+													"type": "string"
+												},
+												"heading": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"description",
+												"heading"
+											],
+											"type": "object"
 										}
 									]
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
+		"/v1/news/update/{heading}": {
+			"patch": {
+				"operationId": "UpdateNewsByHeading",
+				"responses": {
+					"200": {
+						"description": "Updated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "heading",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {}
+						}
+					}
+				}
+			}
+		},
+		"/v1/news/delete": {
+			"delete": {
+				"operationId": "DeleteAllNews",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/v1/news/delete/{heading}": {
+			"delete": {
+				"operationId": "DeleteNewsByHeading",
+				"responses": {
+					"200": {
+						"description": "Deleted",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
 								}
 							}
 						}

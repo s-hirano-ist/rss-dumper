@@ -45,6 +45,11 @@ export function prismaError(
       break;
   }
 }
+
+export function validationError2(controller: NewsController, message: string) {
+  return sendInfoResponse2(controller, 422, message);
+}
+
 export function validationError(response: Response, message: string) {
   sendInfoResponse(response, 422, message);
 }
@@ -53,9 +58,14 @@ export function validationError(response: Response, message: string) {
 export function unknownError2(controller: NewsController, error: unknown) {
   // should not run
   if (error instanceof Error) {
-    sendInfoResponse2(controller, 500, "INTERNAL SERVER ERROR", error.message);
+    return sendInfoResponse2(
+      controller,
+      500,
+      "INTERNAL SERVER ERROR",
+      error.message,
+    );
   } else {
-    sendInfoResponse2(controller, 500, "INTERNAL SERVER ERROR", error);
+    return sendInfoResponse2(controller, 500, "INTERNAL SERVER ERROR", error);
   }
 }
 
