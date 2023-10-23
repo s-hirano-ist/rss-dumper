@@ -53,10 +53,10 @@ devDependencies:
     specifier: ^2.9.3
     version: 2.9.3
   '@types/supertest':
-    specifier: ^2.0.14
+    specifier: ^2.0.15
     version: 2.0.15
   '@types/swagger-ui-express':
-    specifier: ^4.1.4
+    specifier: ^4.1.5
     version: 4.1.5
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.7.5
@@ -65,7 +65,7 @@ devDependencies:
     specifier: ^6.7.5
     version: 6.8.0(eslint@8.52.0)(typescript@5.2.2)
   eslint:
-    specifier: ^8.51.0
+    specifier: ^8.52.0
     version: 8.52.0
   eslint-config-prettier:
     specifier: ^9.0.0
