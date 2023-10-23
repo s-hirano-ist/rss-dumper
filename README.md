@@ -30,23 +30,23 @@ PORT=8080
 Build command
 
 ```bash
-yarn
+pnpm i
 ```
 
 Start command
 
 ```bash
-NODE_ENV=production yarn start
+NODE_ENV=production pnpm start
 ```
 
 ## 🍾 Initial setups
 
 ```bash
 git clone https://github.com/s-hirano-ist/rss-dumper.git
-yarn
-yarn prisma:dev
-yarn tsoa:swagger
-yarn tsoa:routes
+pnpm i
+pnpm prisma:dev
+pnpm tsoa:swagger
+pnpm tsoa:routes
 docker compose up --build -d
 ```
 
@@ -60,7 +60,7 @@ docker compose up --build -d
 ## Tests
 
 ```bash
-yarn test
+pnpm test
 ```
 
 ## Curl commands
