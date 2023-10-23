@@ -8,6 +8,9 @@ dependencies:
   '@prisma/client':
     specifier: 5.4.2
     version: 5.4.2(prisma@5.4.2)
+  '@tsoa/runtime':
+    specifier: ^5.0.0
+    version: 5.0.0
   body-parser:
     specifier: ^1.20.2
     version: 1.20.2
@@ -47,7 +50,7 @@ devDependencies:
     specifier: ^20.8.7
     version: 20.8.7
   '@types/sanitize-html':
-    specifier: ^2.9.2
+    specifier: ^2.9.3
     version: 2.9.3
   '@types/supertest':
     specifier: ^2.0.14
