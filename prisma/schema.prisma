@@ -4,9 +4,6 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  // if not vercel
-  // url       = env("DATABASE_URL")
-  // if vercel
   url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
