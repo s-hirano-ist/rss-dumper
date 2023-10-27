@@ -1,3 +1,6 @@
+// this file should be the same as 
+// https://github.com/s-hirano-ist/mypage/blob/main/prisma/schema.prisma
+// https://github.com/s-hirano-ist/rss-dumper-graphql/blob/main/prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
