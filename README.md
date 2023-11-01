@@ -18,7 +18,6 @@
 Add following environments
 
 ```env
-# DATABASE_URL=
 POSTGRES_PRISMA_URL=
 POSTGRES_URL_NON_POOLING=
 NODE_VERSION=18.17.1
@@ -43,11 +42,12 @@ NODE_ENV=production pnpm start
 
 ```bash
 git clone https://github.com/s-hirano-ist/rss-dumper.git
+cd rss-dumper
+docker compose up --build -d
 pnpm i
 pnpm prisma:dev
 pnpm tsoa:swagger
 pnpm tsoa:routes
-docker compose up --build -d
 ```
 
 ## API path
