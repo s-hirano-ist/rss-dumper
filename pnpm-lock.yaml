@@ -47,7 +47,7 @@ devDependencies:
     specifier: ^29.5.6
     version: 29.5.7
   '@types/node':
-    specifier: ^20.8.9
+    specifier: ^20.8.10
     version: 20.8.10
   '@types/sanitize-html':
     specifier: ^2.9.3
