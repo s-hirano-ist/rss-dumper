@@ -1,38 +1,38 @@
 {
-  "timezone": "Asia/Tokyo",
-  "baseBranches": ["main"],
-  "extends": ["config:base", ":semanticCommitTypeAll(chore)"],
-  "enabledManagers": ["npm"],
-  "dependencyDashboard": true,
-  "schedule": ["before 11am every monday"],
-  "automergeSchedule": ["before 11am every tuesday"],
-  "labels": ["dependencies"],
-  "rangeStrategy": "bump",
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true
+  timezone: "Asia/Tokyo",
+  baseBranches: ["main"],
+  extends: ["config:base", ":semanticCommitTypeAll(chore)"],
+  enabledManagers: ["npm"],
+  dependencyDashboard: true,
+  schedule: ["before 11am on monday"],
+  automergeSchedule: ["before 11am on monday"],
+  labels: ["dependencies"],
+  rangeStrategy: "bump",
+  lockFileMaintenance: {
+    enabled: true,
+    automerge: true,
   },
-  "vulnerabilityAlerts": {
-    "labels": ["security"],
-    "automerge": true
+  vulnerabilityAlerts: {
+    labels: ["security"],
+    automerge: true,
   },
-  "packageRules": [
+  packageRules: [
     {
-      "matchManagers": ["npm"],
-      "matchDepTypes": ["devDependencies"],
-      "matchPackagePatterns": ["lint", "prettier"],
-      "automerge": true
+      matchManagers: ["npm"],
+      matchDepTypes: ["devDependencies"],
+      matchPackagePatterns: ["lint", "prettier"],
+      automerge: true,
     },
     {
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchCurrentVersion": "!/^0/",
-      "automerge": true
+      matchManagers: ["npm"],
+      matchUpdateTypes: ["minor", "patch"],
+      matchCurrentVersion: "!/^0/",
+      automerge: true,
     },
     {
-      "extends": ["monorepo:ionic-native"],
-      "matchUpdateTypes": ["patch", "minor"],
-      "automerge": true
-    }
-  ]
+      extends: ["monorepo:ionic-native"],
+      matchUpdateTypes: ["patch", "minor"],
+      automerge: true,
+    },
+  ],
 }
