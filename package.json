@@ -20,7 +20,8 @@
     "prisma:studio": "prisma studio",
     "test": "NODE_ENV=test jest --runInBand --collect-coverage",
     "tsoa:swagger": "tsoa spec",
-    "tsoa:routes": "tsoa routes"
+    "tsoa:routes": "tsoa routes",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
