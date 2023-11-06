@@ -12,6 +12,10 @@
     enabled: true,
     automerge: true,
   },
+  vulnerabilityAlerts: {
+    labels: ["security"],
+    automerge: true,
+  },
   packageRules: [
     {
       matchManagers: ["npm"],
