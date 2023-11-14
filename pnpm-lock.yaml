@@ -50,8 +50,8 @@ devDependencies:
     specifier: ^20.8.10
     version: 20.8.10
   '@types/sanitize-html':
-    specifier: ^2.9.3
-    version: 2.9.3
+    specifier: ^2.9.4
+    version: 2.9.4
   '@types/supertest':
     specifier: ^2.0.15
     version: 2.0.15
@@ -1032,8 +1032,8 @@ packages:
   /@types/range-parser@1.2.6:
     resolution: {integrity: sha512-+0autS93xyXizIYiyL02FCY8N+KkKPhILhcUSA276HxzreZ16kl+cmwvV2qAM/PuCCwPXzOXOWhiPcw20uSFcA==}
 
-  /@types/sanitize-html@2.9.3:
-    resolution: {integrity: sha512-1rsSdEJLV7utAG+Fms2uP+nSmmYmOhUUSSZvUz4wF2wlA0M5/A/gVgnpWZ7EKaPWsrrxWiSuNJqSBW8dh2isBA==}
+  /@types/sanitize-html@2.9.4:
+    resolution: {integrity: sha512-Ym4hjmAFxF/eux7nW2yDPAj2o9RYh0vP/9V5ECoHtgJ/O9nPGslUd20CMn6WatRMlFVfjMTg3lMcWq8YyO6QnA==}
     dependencies:
       htmlparser2: 8.0.2
     dev: true
