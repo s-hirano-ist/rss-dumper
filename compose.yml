@@ -5,6 +5,7 @@ services:
     container_name: rss-db
     build:
       context: .
+      dockerfile: db.Dockerfile
     volumes:
       - rss-db-data:/var/lib/postgresql/data
     ports:
@@ -14,6 +15,12 @@ services:
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: rss-db
     restart: always
-
+  server:
+    container_name: rss-server
+    build:
+      context: .
+      dockerfile: server.Dockerfile
+    ports:
+      - 8080:8080
 volumes:
   rss-db-data:
