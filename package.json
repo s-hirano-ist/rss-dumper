@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "rss dumper",
   "author": "Soraki Hirano",
-  "packageManager": "pnpm@8.10.2",
+  "packageManager": "pnpm@8.10.5",
   "scripts": {
     "dev": "nodemon --watch 'src/**/*.ts' --watch 'build/**/*.ts' --exec ts-node src/app.ts",
     "start": "ts-node src/app.ts",
