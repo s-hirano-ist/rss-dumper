@@ -2,7 +2,7 @@
   timezone: "Asia/Tokyo",
   baseBranches: ["main"],
   extends: ["config:base", ":semanticCommitTypeAll(chore)"],
-  enabledManagers: ["npm"],
+  enabledManagers: ["npm", "docker-compose", "dockerfile", "github-actions"],
   dependencyDashboard: true,
   schedule: ["after 1pm on monday"],
   automergeSchedule: ["after 1pm on tuesday"],
