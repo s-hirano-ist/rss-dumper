@@ -38,6 +38,12 @@ Start command
 NODE_ENV=production pnpm start
 ```
 
+Use docker
+
+```bash
+docker compose --profile app up -d
+```
+
 ## 🍾 Initial setups
 
 ```bash

@@ -14,7 +14,6 @@ services:
       POSTGRES_USER: ${USERNAME}
       POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: rss-db
-    restart: always
   server:
     container_name: rss-server
     build:
@@ -22,5 +21,7 @@ services:
       dockerfile: server.Dockerfile
     ports:
       - 8080:8080
+    profiles:
+      - app
 volumes:
   rss-db-data:
