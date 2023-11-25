@@ -1,6 +1,14 @@
 # RSS Dumper
 
-## Tech Stack
+## 👌 Known Issues and checkpoints
+
+- [ ] Bundle with Webpack or Vite then use pm2 for auto restart.
+- [ ] Await is not supposed to be used.
+  > https://qiita.com/yukin01/items/1a36606439123525dc6d
+- [ ] More tests, especially unit tests. Better if parallelized.
+- [ ] Security issues.
+
+## 💻 Tech Stack
 
 **Language** - [TypeScript](https://www.typescriptlang.org/)  
 **Main Framework** - [Express](https://expressjs.com/)  
@@ -26,7 +34,7 @@ PORT=8080
 
 > https://render.com/docs/node-version
 
-Build command
+Build command (This should change to webpack & pm2 or vite for bundling)
 
 ```bash
 pnpm i
