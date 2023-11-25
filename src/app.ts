@@ -16,18 +16,18 @@ const USERNAME = process.env.USERNAME;
 const PASSWORD = process.env.PASSWORD;
 
 if (!USERNAME || !PASSWORD) throw new Error("secrets missing.");
-// passport.use(
-//   new passportHttp.BasicStrategy((username, password, done) => {
-//     if (username === USERNAME && password === PASSWORD) return done(null, true);
-//     else return done(null, false);
-//   }),
-// );
 passport.use(
-  new passportHttp.DigestStrategy({ qop: "auth" }, (username, cb) => {
-    if (username === USERNAME) return cb(null, username, PASSWORD);
-    else return cb(null, false);
+  new passportHttp.BasicStrategy((username, password, done) => {
+    if (username === USERNAME && password === PASSWORD) return done(null, true);
+    else return done(null, false);
   }),
 );
+// passport.use(
+//   new passportHttp.DigestStrategy({ qop: "auth" }, (username, cb) => {
+//     if (username === USERNAME) return cb(null, username, PASSWORD);
+//     else return cb(null, false);
+//   }),
+// );
 
 app.use(
   cors({
@@ -40,12 +40,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
-  // passport.authenticate("basic", {
-  //   session: false,
-  // }),
-  passport.authenticate("digest", {
+  passport.authenticate("basic", {
     session: false,
   }),
+  // passport.authenticate("digest", {
+  //   session: false,
+  // }),
 );
 // this route file is not included in Swagger UI
 app.use("/v1/news-detail", newsDetailRoutes);
