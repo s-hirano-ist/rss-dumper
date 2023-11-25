@@ -35,6 +35,8 @@ export class NewsController extends Controller {
     return getNewsAndNewsDetailByHeadingService(heading, this);
   }
 
+  // TODO: specify error responses as well.
+  // https://tsoa-community.github.io/docs/error-handling.html#specifying-error-response-types-for-openapi
   @SuccessResponse("201", "Created")
   @Post("create")
   public async createNews(@Body() requestBody: any) {

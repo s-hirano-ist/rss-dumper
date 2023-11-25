@@ -10,12 +10,11 @@
 	},
 	"info": {
 		"title": "rss-dumper",
-		"version": "0.0.1",
-		"description": "RSS Dumper Project.",
-		"license": {
-			"name": "ISC"
-		},
-		"contact": {}
+		"version": "1.0.0",
+		"description": "rss dumper",
+		"contact": {
+			"name": "Soraki Hirano"
+		}
 	},
 	"openapi": "3.0.0",
 	"paths": {
