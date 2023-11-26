@@ -1,5 +1,7 @@
 # RSS Dumper
 
+Sample Express server for studying backend REST server.
+
 ## 👌 Known Issues and checkpoints
 
 - [ ] Bundle with Webpack or Vite then use pm2 for auto restart.
