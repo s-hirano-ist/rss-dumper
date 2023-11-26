@@ -95,11 +95,10 @@ curl -s -X DELETE https://rss-dumper.onrender.com/v1/news/delete/test-a
 curl -s -X DELETE https://rss-dumper.onrender.com/v1/news/delete
 ```
 
-## 🪝 Tags
+## 🪝 Tags & Realease
 
 ```bash
-git tag vx.x.x
-git push origin vx.x.x
+gh release create --generate-notes
 ```
 
 ## Notes
