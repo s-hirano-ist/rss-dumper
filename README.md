@@ -22,7 +22,8 @@ Sample Express server for studying backend REST server.
 **Code Formatting** - [Prettier](https://prettier.io/)  
 **Linting** - [ESLint](https://eslint.org)  
 **Validation** - [Joi](https://joi.dev/)  
-**Generate Swagger** - [Tsoa](https://tsoa-community.github.io/docs/)
+**Generate Swagger** - [Tsoa](https://tsoa-community.github.io/docs/)  
+**Validate Swagger** - [openapi-schema-validator](https://github.com/kogosoftwarellc/open-api/tree/main/packages/openapi-schema-validator)
 
 ## Render settings
 
