@@ -9,6 +9,7 @@ Sample Express server for studying backend REST server.
   > https://qiita.com/yukin01/items/1a36606439123525dc6d
 - [ ] More tests, especially unit tests. Better if parallelized.
 - [ ] Security issues.
+- [ ] Add huskey/pre-commit to run "tsoa" and validate swagger.json before commit.
 
 ## 💻 Tech Stack
 
