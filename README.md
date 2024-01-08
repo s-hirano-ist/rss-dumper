@@ -10,6 +10,10 @@ Sample Express server for studying backend REST server.
 - [ ] More tests, especially unit tests. Better if parallelized.
 - [ ] Security issues.
 - [ ] Add huskey/pre-commit to run "tsoa" and validate swagger.json before commit.
+- [ ] Easy validation using a library like [express-validator](https://express-validator.github.io/docs/).
+- [ ] Want to introduce absolute imports and ESModule.
+
+See [GitHub issue 186](https://github.com/s-hirano-ist/rss-dumper/issues/186) for more details(?).
 
 ## 💻 Tech Stack
 
