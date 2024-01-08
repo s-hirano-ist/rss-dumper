@@ -12,6 +12,7 @@ Sample Express server for studying backend REST server.
 - [ ] Add huskey/pre-commit to run "tsoa" and validate swagger.json before commit.
 - [ ] Easy validation using a library like [express-validator](https://express-validator.github.io/docs/).
 - [ ] Want to introduce absolute imports and ESModule.
+- [ ] Tsoa is not enough for generating [OpenAPI document api responses on errors](https://tsoa-community.github.io/docs/error-handling.html#specifying-error-response-types-for-openapi).
 
 See [GitHub issue 186](https://github.com/s-hirano-ist/rss-dumper/issues/186) for more details(?).
 
