@@ -9,6 +9,11 @@ Sample Express server for studying backend REST server.
   > https://qiita.com/yukin01/items/1a36606439123525dc6d
 - [ ] More tests, especially unit tests. Better if parallelized.
 - [ ] Security issues.
+- [ ] Add huskey/pre-commit to run "tsoa" and validate swagger.json before commit.
+- [ ] Easy validation using a library like [express-validator](https://express-validator.github.io/docs/).
+- [ ] Want to introduce absolute imports and ESModule.
+
+See [GitHub issue 186](https://github.com/s-hirano-ist/rss-dumper/issues/186) for more details(?).
 
 ## 💻 Tech Stack
 
@@ -21,7 +26,8 @@ Sample Express server for studying backend REST server.
 **Code Formatting** - [Prettier](https://prettier.io/)  
 **Linting** - [ESLint](https://eslint.org)  
 **Validation** - [Joi](https://joi.dev/)  
-**Generate Swagger** - [Tsoa](https://tsoa-community.github.io/docs/)
+**Generate Swagger** - [Tsoa](https://tsoa-community.github.io/docs/)  
+**Validate Swagger** - [openapi-schema-validator](https://github.com/kogosoftwarellc/open-api/tree/main/packages/openapi-schema-validator)
 
 ## Render settings
 
